@@ -1,0 +1,24 @@
+# ################################
+# Image Downloader
+# ################################
+
+AUTHOR
+    Sze Yan Li
+
+DESCRIPTION
+    This program takes a URL to a web site and a local path and downloads all image files based on <IMG> tags. 
+    
+REFERENCES
+
+        
+RELEVANT FILES
+    README                  - this file
+
+    
+NOTES/FEATURES
+    
+    
+USAGE
+
+
+endofreadme
