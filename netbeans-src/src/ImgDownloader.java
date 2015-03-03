@@ -1,4 +1,10 @@
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /**
  * This program takes a URL to a web site and a local path and downloads all image files based on <IMG> tags.
  *
@@ -24,11 +30,34 @@ public class ImgDownloader {
                     + "-ow ");
             System.exit(1);
         }
-        
-       //Parse URL - args[0]
-       url = args[0];
-        
-       //Parse Local Path - args[1]
+
+        //Parse URL - args[0]
+        try {
+            //URL myURL = new URL(args[0]);
+            //URLConnection myURLConnection = myURL.openConnection();
+            //myURLConnection.connect();
+            
+            URL oracle = new URL("http://www.oracle.com/");
+            BufferedReader in = new BufferedReader(
+            new InputStreamReader(oracle.openStream()));
+
+            String inputLine;
+            while ((inputLine = in.readLine()) != null)
+                System.out.println(inputLine);
+            in.close();
+            
+            
+        } catch (MalformedURLException e) {
+             // new URL() failed
+            e.printStackTrace();
+            System.exit(1);
+        } catch (IOException e) {
+             // openConnection() failed
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        //Parse Local Path - args[1]
         try {
             localPath = args[1];
             System.out.println(localPath);
@@ -38,16 +67,16 @@ public class ImgDownloader {
             System.err.println("heyo1");
             System.out.println(localPath);
         }
-        
+
         //Parse overwrite flag - args[2]
         try {
             if (args[2].toLowerCase().equals("-ow")) {
                 overwrite = true;
                 System.out.println(overwrite);
-            }else{
-                throw new IllegalArgumentException(properUsage); 
+            } else {
+                throw new IllegalArgumentException(properUsage);
             }
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             //Badly written overwrite flag argument.  Print error and exit.
             System.err.println(e.getMessage());
             System.exit(1);

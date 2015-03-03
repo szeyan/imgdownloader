@@ -13,7 +13,9 @@ REFERENCES/TOOLS
 		https://netbeans.org/
 	Get working directory
 		http://stackoverflow.com/questions/4871051/getting-the-current-working-directory-in-java
-        
+    Opening and Parsing URL
+		http://docs.oracle.com/javase/tutorial/networking/urls/connecting.html
+		
 RELEVANT FILES
     README                  - this file
 
