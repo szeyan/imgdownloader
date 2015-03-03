@@ -24,8 +24,10 @@ public class ImgDownloader {
                     + "-ow ");
             System.exit(1);
         }
-
+        
        //Parse URL - args[0]
+       url = args[0];
+        
        //Parse Local Path - args[1]
         try {
             localPath = args[1];
@@ -36,6 +38,7 @@ public class ImgDownloader {
             System.err.println("heyo1");
             System.out.println(localPath);
         }
+        
         //Parse overwrite flag - args[2]
         try {
             if (args[2].toLowerCase().equals("-ow")) {
@@ -45,6 +48,7 @@ public class ImgDownloader {
                 throw new IllegalArgumentException(properUsage); 
             }
         } catch (IllegalArgumentException e){
+            //Badly written overwrite flag argument.  Print error and exit.
             System.err.println(e.getMessage());
             System.exit(1);
         } catch (Exception e) {
