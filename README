@@ -50,10 +50,11 @@ NOTES/FEATURES
 		1. Use an 3rd party HTML parser
 		2. Use java's HTMLEditorKit and HTMLDocument classes
 		3. Use regular expressions
+		4. Use String methods such as contains() and search through the HTML
 		
-		At first, I tried to use method #2, but then I realized it would arbitrarily skip over some elements and not work on some pages, making it very unstable.  I briefly considered #3, but immediately knew this would result in messy code and unpredictable behaviour like #2.  
+		At first, I tried to use method #2, but then I realized it would arbitrarily skip over some elements and not work on some pages, making it very unstable.  I briefly considered #3, but immediately knew this would result in messy code and unpredictable behaviour like #2.  #1 is a good choice, and there are many reliable parsers in existence.  However, it means that my program will have to rely on a third-party for stability. 
 		
-		Thus, I decided on #1 and chose JSoup for parsing the HTML.  The only con is that this program will have to rely on an external library in order to run.
+		In the end, I chose #4 because it was easy to implement, and it allows me full control over the parsing behaviour.  
 		
 	There were many ways to find the image format:
 		1. Use ImageIO (from javax) and extract the image format using one of its methods.  

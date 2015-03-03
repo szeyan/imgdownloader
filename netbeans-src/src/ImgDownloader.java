@@ -2,14 +2,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.Element;
-import javax.swing.text.ElementIterator;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.html.HTML;
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.HTMLEditorKit;
-import javax.swing.text.html.parser.ParserDelegator;
 
 /**
  * This program takes a URL to a website and a local path and downloads all image files based on <IMG> tags.
@@ -56,18 +48,33 @@ public class ImgDownloader {
              String base = myURL.getProtocol() + "://" + myURL.getHost() + path;
 
              System.out.println(base);*/
-
-            /*
+            
+            final String imgTag = "<img";
+            final String imgSrcAttributeName = "src";
+            String imgSrc = "";
+            boolean containsImgTag = false;
+            
              URL myURL = new URL("http://pages.uoregon.edu/szeyan/");
              BufferedReader in = new BufferedReader(
-             new InputStreamReader(myURL.openStream()));
+                     new InputStreamReader(myURL.openStream()));
 
              String inputLine;
-             while ((inputLine = in.readLine()) != null)
-             System.out.println(inputLine);
-             in.close();*/
-            /*
+             while ((inputLine = in.readLine()) != null){
+                 //System.out.println(inputLine);
+                 String line = inputLine.toLowerCase();
+                 if(line.contains(imgTag)){
+                     containsImgTag = true;
+                     if(line.contains(imgSrcAttributeName)){
+                         System.out.println(inputLine);
+                     }
+                 }
+             }
+             
+             in.close();
+             
+             
             
+             /*
              url = new URL("http://pages.uoregon.edu/szeyan/img/ml.png");
              InputStream in = new BufferedInputStream(url.openStream());
              ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -88,29 +95,6 @@ public class ImgDownloader {
              fos.close();
             
              */
-            url = new URL("http://getbootstrap.com/2.3.2/");
-
-            //Open and read in the contents from the URL
-            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-
-            //Create an HTMLDocument object and place in the URL's contents, 
-            //so that it can be easily parsed through later
-            HTMLEditorKit htmlKit = new HTMLEditorKit();
-            HTMLDocument htmlDoc = (HTMLDocument) htmlKit.createDefaultDocument();
-            HTMLEditorKit.Parser parser = new ParserDelegator();
-            HTMLEditorKit.ParserCallback callback = htmlDoc.getReader(0);
-            parser.parse(in, callback, true);
-
-            //Iterate through all the IMG elements within the HTML document
-            //extract the img's source path and then download the image
-            for (HTMLDocument.Iterator iterator = htmlDoc.getIterator(HTML.Tag.IMG); 
-             iterator.isValid(); 
-             iterator.next()) {
-                
-             AttributeSet attributes = iterator.getAttributes();
-             String imgSrc = (String) attributes.getAttribute(HTML.Attribute.SRC);
-                System.out.println(imgSrc);
-             }
 
         } catch (Exception e) {
             //ie: MalformedURLException where new URL() failed
