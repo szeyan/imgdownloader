@@ -7,7 +7,6 @@
 public class ImgDownloader {
 
     //Default save path is where the program is located
-
     public static final String DEFAULT_PATH = System.getProperty("user.dir");
 
     public static void main(String args[]) {
@@ -29,14 +28,18 @@ public class ImgDownloader {
        //Parse Local Path - args[1]
         try {
             localPath = args[1];
+            System.out.println(localPath);
         } catch (Exception e) {
-            //this argument is optional, so ignore this error 
+            //No local path was specified. Program directory will be used as the image save path
+            localPath = DEFAULT_PATH;
             System.err.println("heyo1");
+            System.out.println(localPath);
         }
         //Parse overwrite flag - args[2]
         try {
             if (args[2].toLowerCase().equals("-ow")) {
                 overwrite = true;
+                System.out.println(overwrite);
             }
         } catch (Exception e) {
             //this argument is optional, so ignore this error 
