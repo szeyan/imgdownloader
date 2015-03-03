@@ -6,7 +6,7 @@ AUTHOR
     Sze Yan (Melody) Li
 
 DESCRIPTION
-    This program takes an URL to a website and a local path and downloads all image files based on <IMG> tags. 
+    This program takes an URL to a website and a local destination path and downloads all image files based on <IMG> tags. 
     
 REFERENCES/TOOLS
 	NetBeans IDE 

@@ -1,11 +1,7 @@
 
-import java.net.URL;
-
-
-
 /**
  * The Main class parses the arguments and creates an ImgDownloader object to download all the images
- * from a given URL to some local path on the user's system
+ * from a given URL to some local destination path on the user's system
  *
  * @author Sze Yan Li
  */
@@ -18,8 +14,8 @@ public class Main {
         //Program requires at least 1 argument but no more than 3
         if (args.length < 1 || args.length > 3) {
             System.err.println(properUsage);
-            System.err.println("\tie: java Main "
-                    + "http://pages.uoregon.edu/szeyan/img/ml.png "
+            System.err.println("ie: java Main "
+                    + "http://pages.uoregon.edu/szeyan/ "
                     + "C:\\Users\\Melody\\Downloads "
                     + "-ow ");
             System.exit(1);
@@ -39,17 +35,14 @@ public class Main {
           if(args.length > 2){
               if (args[2].toLowerCase().equals("-ow")) {
                 imgDownloader.setOverwrite(true);
-                System.out.println(imgDownloader.willOverwrite());
             } else {
                 throw new IllegalArgumentException(properUsage);
             }
-          }
-          
+          }    
         } catch (Exception e) {
             //ie: MalformedURLException where new URL() failed
             e.printStackTrace();
             System.exit(1);
-        }
-        
+        } 
     }
 }
