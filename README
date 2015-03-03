@@ -18,9 +18,6 @@ REFERENCES/TOOLS
 		http://stackoverflow.com/questions/6013628/how-to-fetch-base-url-from-the-given-url-using-java
 	Downloading an image from an URL
 		http://stackoverflow.com/questions/5882005/how-to-download-image-from-any-web-page-in-java
-	Parsing HTML tags using HTMLEditorKit
-		http://examples.oreilly.com/jswing2/code/goodies/HtmlEdKit.pdf
-		http://www.compiletimeerror.com/2013/08/java-downloadextract-all-images-from.html#.VPT43PnF98E
 		
 RELEVANT FILES
     README                  - this file
@@ -38,7 +35,7 @@ NOTES/FEATURES
 		- Optionally choose whether to overwrite existing images if they exist in the destination directory
 			- if overwrite (ie: "-ow") is not specified, the images will be saved with a timestamp to prevent overwrites
 	
-	The program finds the images to download by searching for IMG elements within the website.  Specifically, it will look for the "src" attribute within the IMG element.  Additionally, if the source path contains ".../" for a prior directory, it will correctly parse the path and download the image. If the "src" is not specified or if the image fails to download, the program will simply move onto the next IMG element.  
+	The program finds the images to download by searching for IMG elements within the website.  Specifically, it will look for the "src" attribute within the IMG element.  Additionally, if the source path contains ".../" for a prior directory or is a relative path, the program will correct the path and download the image. If the "src" is not specified or if the image fails to download, the program will simply move onto the next IMG element.  
 	
 	In short, the program will not crash if it fails to download an image.
 	
