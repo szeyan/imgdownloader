@@ -13,10 +13,11 @@ public class ImgDownloader {
         String url = "";            //URL to web site to download the images from
         String localPath = "";      //local path to save all the images to
         Boolean overwrite = false;  //flag that specifies whether to overwrite existing files
+        String properUsage = "Proper Usage: java ImgDownloader <URL> [<Local Path>] [-ow] ";
 
         //Program requires at least 1 argument but no more than 3
         if (args.length < 1 || args.length > 3) {
-            System.err.println("Proper Usage: java ImgDownloader <URL> [<Local Path>] [-ow] ");
+            System.err.println(properUsage);
             System.err.println("\tie: java ImgDownloader "
                     + "http://pages.uoregon.edu/szeyan/img/ml.png "
                     + "C:\\Users\\Melody\\Downloads "
@@ -40,9 +41,14 @@ public class ImgDownloader {
             if (args[2].toLowerCase().equals("-ow")) {
                 overwrite = true;
                 System.out.println(overwrite);
+            }else{
+                throw new IllegalArgumentException(properUsage); 
             }
+        } catch (IllegalArgumentException e){
+            System.err.println(e.getMessage());
+            System.exit(1);
         } catch (Exception e) {
-            //this argument is optional, so ignore this error 
+            //This argument wasn't specified/does not exist.  Ignore error.
             System.err.println("heyo2");
         }
     }
