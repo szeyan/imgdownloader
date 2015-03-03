@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -24,7 +26,7 @@ public class ImgDownloader {
     private URL url;
 
     /* local destination path to save all the images to */
-    private File localPath = new File(DEFAULT_PATH);
+    private String localPath = DEFAULT_PATH;
 
     /* flag that specifies whether to overwrite existing files */
     private Boolean overwrite = false;
@@ -49,7 +51,7 @@ public class ImgDownloader {
      * @return the local destination to save all the images to
      */
     public String getLocalPath() {
-        return this.localPath.getPath();
+        return this.localPath;
     }
 
     /**
@@ -61,7 +63,7 @@ public class ImgDownloader {
     public void setLocalPath(String path) throws IllegalArgumentException {
         File newPath = new File(path);
         if (newPath.isDirectory() && newPath.canWrite()) {
-            this.localPath = newPath;
+            this.localPath = newPath.getAbsolutePath();
         } else {
             throw new IllegalArgumentException(path + " is not a valid path");
         }
@@ -111,10 +113,25 @@ public class ImgDownloader {
         out.close();
         in.close();
         byte[] response = out.toByteArray();
-        
-        FileOutputStream fos = new FileOutputStream(this.localPath+File.separator+"borrowed_image.png");
+
+        String path = this.localPath + File.separator + this.getSaveAsName("blue.png");
+        FileOutputStream fos = new FileOutputStream(path);
         fos.write(response);
         fos.close();
+    }
+
+    /**
+     * @param imgName name of the image
+     * @return the image name if the overwrite flag is true
+     *         the timestamp concatenated to the image name if overwrite flag is false
+     */
+    private String getSaveAsName(String imgName) { 
+        if (this.overwrite) {
+            return imgName;
+        } else {
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+            return timeStamp + "_" + imgName;
+        }
     }
 
 }

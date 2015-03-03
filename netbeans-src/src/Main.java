@@ -21,14 +21,14 @@ public class Main {
             System.exit(1);
         }
  
-        //Parse the arguments
         try {
           //Parse URL - args[0]
           imgDownloader = new ImgDownloader("http://pages.uoregon.edu/szeyan/img/ml.png"); 
           
           //Parse Local Path - args[1]
           if(args.length > 1){
-             imgDownloader.setLocalPath(args[1]); 
+             imgDownloader.setLocalPath("C:\\Users\\Melody\\Downloads\\New folder");
+             System.out.println(imgDownloader.getLocalPath());
           }
           
           //Parse overwrite flag - args[2]
@@ -38,9 +38,13 @@ public class Main {
             } else {
                 throw new IllegalArgumentException(properUsage);
             }
-          }    
+          }
+          
+          //Download all the images now that the arguments are set
+          imgDownloader.downloadImages();
+          
         } catch (Exception e) {
-            //ie: MalformedURLException where new URL() failed
+            //ie: MalformedURLException where setting URL failed
             e.printStackTrace();
             System.exit(1);
         } 
