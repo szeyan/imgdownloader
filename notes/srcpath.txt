@@ -1,0 +1,24 @@
+Types of src path layouts:
+
+	<img class="linkedin"data-src="img/in0.png" alt="Linkedin0" />
+
+	<img class="linkedin"src="img/in1.png" alt="Linkedin1" />
+
+	<img class="linkedin"
+	src="img/in2.png" alt="Linkedin2" />
+
+	<img class="linkedin"
+	src=
+
+	"img/in3.png" alt="Linkedin3" />
+
+	<img class="linkedin"
+	src=
+	"
+	img/in4.png" alt="Linkedin4" />
+
+	<img class="linkedin"src=
+	"
+	img/in5.png
+
+	" alt="Linkedin5" />
