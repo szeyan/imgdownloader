@@ -1,11 +1,6 @@
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * This program takes a URL to a web site and a local path and downloads all image files based on <IMG> tags.
@@ -35,9 +30,24 @@ public class ImgDownloader {
 
         //Parse URL - args[0]
         try {
-            //URL myURL = new URL(args[0]);
-            //URLConnection myURLConnection = myURL.openConnection();
-            //myURLConnection.connect();
+            URL myURL = new URL("http://pages.uoregon.edu/szeyan/img/ml.png");
+            URLConnection myURLConnection = myURL.openConnection();
+            myURLConnection.connect();
+            
+             System.out.println("protocol = " + myURL.getProtocol());
+        System.out.println("authority = " + myURL.getAuthority());
+        System.out.println("host = " + myURL.getHost());
+        System.out.println("port = " + myURL.getPort());
+        System.out.println("path = " + myURL.getPath());
+        System.out.println("query = " + myURL.getQuery());
+        System.out.println("filename = " + myURL.getFile());
+        System.out.println("ref = " + myURL.getRef());
+
+        String path = myURL.getFile().substring(0, myURL.getFile().lastIndexOf('/'));
+        String base = myURL.getProtocol() + "://" + myURL.getHost() + path;
+        
+        System.out.println(base);
+            
             /*
              URL myURL = new URL("http://pages.uoregon.edu/szeyan/");
              BufferedReader in = new BufferedReader(
@@ -47,12 +57,16 @@ public class ImgDownloader {
              while ((inputLine = in.readLine()) != null)
              System.out.println(inputLine);
              in.close();*/
-
+            
+            /*
+            
             url = new URL("http://pages.uoregon.edu/szeyan/img/ml.png");
             InputStream in = new BufferedInputStream(url.openStream());
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
             int length = 0;
+            
+            //Read in and write out the image data in chunks
             while((length = in.read(buffer)) != -1){
                 out.write(buffer, 0, length);
             }
@@ -64,6 +78,8 @@ public class ImgDownloader {
             FileOutputStream fos = new FileOutputStream("C://borrowed_image.png");
             fos.write(response);
             fos.close();
+            
+            */
 
         } catch (Exception e) {
             //ie: MalformedURLException where new URL() failed

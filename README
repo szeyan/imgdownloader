@@ -6,7 +6,7 @@ AUTHOR
     Sze Yan (Melody) Li
 
 DESCRIPTION
-    This program takes a URL to a web site and a local path and downloads all image files based on <IMG> tags. 
+    This program takes an URL to a website and a local path and downloads all image files based on <IMG> tags. 
     
 REFERENCES/TOOLS
 	NetBeans IDE 
@@ -15,15 +15,39 @@ REFERENCES/TOOLS
 		http://stackoverflow.com/questions/4871051/getting-the-current-working-directory-in-java
     Opening and Parsing URL
 		http://docs.oracle.com/javase/tutorial/networking/urls/connecting.html
+		http://stackoverflow.com/questions/6013628/how-to-fetch-base-url-from-the-given-url-using-java
 	Downloading an image from an URL
 		http://stackoverflow.com/questions/5882005/how-to-download-image-from-any-web-page-in-java
+	Parsing HTML tags using HTMLEditorKit
+		http://examples.oreilly.com/jswing2/code/goodies/HtmlEdKit.pdf
+		http://www.compiletimeerror.com/2013/08/java-downloadextract-all-images-from.html#.VPT43PnF98E
 		
 RELEVANT FILES
     README                  - this file
 
     
 NOTES/FEATURES
-    
+	This program allows the user to do the following:
+		- Specify the URL to download from in a few ways:
+			- the full path (ie: http://pages.uoregon.edu/szeyan/index.html)
+			- or the base path (ie: http://pages.uoregon.edu/szeyan/)
+			- or the image path itself (ie: http://pages.uoregon.edu/szeyan/img/ml.png)
+		- Optionally choose the local path to save the images to:
+			- ie: C:\Users\Melody\Downloads
+			- if the local path is not specified, the images will be saved in the same directory as the program
+		- Optionally choose whether to overwrite existing images if they exist in the destination directory
+			- if overwrite (ie: "-ow") is not specified, the images will be saved with a timestamp to prevent overwrites
+	
+	The program finds the images to download by searching for IMG elements within the website.  Specifically, it will look for the "src" attribute within the IMG element.  If the "src" is not specified or if the image fails to download, the program will simply move onto the next IMG element.    
+	
+	In short, the program will not crash if it fails to download an image.
+	
+	To speed up the process of downloading the images, a thread is created for reading in and saving each image.  
+		
+	Some other design decisions:
+		Upon research, I noticed there were many HTML parsers like JSoup, which could've greatly aided this project.  However, I wanted to write this program without the use of external libraries to enhance my understanding of java's standard libraries.
+
+		There were many ways to find the image format.  One way was to use ImageIO (from javax) and extract the image format using one of its methods.  Another way was compare the image path with a set of common image formats.  I did not choose ImageIO method because upon reading its documentation, I realized it did not support some recent web image formats like SVG.  I also did not choose the comparison method because it relied on a certain bias as to what's "common" for an image format.  What I wanted was for the image format to be as flexible as possible.  Thus, I chose to extract the extension from the image path and use that as the image format.  The only con is that the extension could be malformed, which was a trade-off I was willing to make in order to ensure the program's flexibility.
     
 USAGE
 
