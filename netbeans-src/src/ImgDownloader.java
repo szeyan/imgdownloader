@@ -15,11 +15,31 @@ public class ImgDownloader {
     private Boolean overwrite = false;  //flag that specifies whether to overwrite existing files
 
     /**
-     * Constructor
+     * Constructor takes in a String to a website
      *
      * @param url URL to a website to download the images from
      */
-    public ImgDownloader(URL url) throws MalformedURLException {
-
+    public ImgDownloader(String url) throws MalformedURLException {
+        this.url = new URL(url);
+    }
+    
+    public String getLocalPath(){
+        return this.localPath;
+    }
+    
+    public void setLocalPath(String path){
+        
+    }
+    
+    public Boolean willOverwrite(){
+        return this.overwrite;
+    }
+    
+    public void setOverwrite(Boolean overwrite){
+        this.overwrite = overwrite;
+    }
+    
+    public void downloadImages(){
+        
     }
 }
