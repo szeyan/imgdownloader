@@ -38,16 +38,28 @@ NOTES/FEATURES
 		- Optionally choose whether to overwrite existing images if they exist in the destination directory
 			- if overwrite (ie: "-ow") is not specified, the images will be saved with a timestamp to prevent overwrites
 	
-	The program finds the images to download by searching for IMG elements within the website.  Specifically, it will look for the "src" attribute within the IMG element.  If the "src" is not specified or if the image fails to download, the program will simply move onto the next IMG element.    
+	The program finds the images to download by searching for IMG elements within the website.  Specifically, it will look for the "src" attribute within the IMG element.  Additionally, if the source path contains ".../" for a prior directory, it will correctly parse the path and download the image. If the "src" is not specified or if the image fails to download, the program will simply move onto the next IMG element.  
 	
 	In short, the program will not crash if it fails to download an image.
 	
-	To speed up the process of downloading the images, a thread is created for reading in and saving each image.  
-		
-	Some other design decisions:
-		Upon research, I noticed there were many HTML parsers like JSoup, which could've greatly aided this project.  However, I wanted to write this program without the use of external libraries to enhance my understanding of java's standard libraries.
+	To speed up the process of downloading the images, threads are created for reading in and saving each image.
 
-		There were many ways to find the image format.  One way was to use ImageIO (from javax) and extract the image format using one of its methods.  Another way was compare the image path with a set of common image formats.  I did not choose ImageIO method because upon reading its documentation, I realized it did not support some recent web image formats like SVG.  I also did not choose the comparison method because it relied on a certain bias as to what's "common" for an image format.  What I wanted was for the image format to be as flexible as possible.  Thus, I chose to extract the extension from the image path and use that as the image format.  The only con is that the extension could be malformed, which was a trade-off I was willing to make in order to ensure the program's flexibility.
+	Images with the same source path within a website (multiple copies) will only be saved once.
+
+	There were a few ways to parse the HTML for IMG tags:
+		1. Use an 3rd party HTML parser
+		2. Use java's HTMLEditorKit and HTMLDocument classes
+		3. Use regular expressions
+		
+		At first, I tried to use method #2, but then I realized it would arbitrarily skip over some elements and not work on some pages, making it very unstable.  I briefly considered #3, but immediately knew this would result in messy code and unpredictable behaviour like #2.  
+		
+		Thus, I decided on #1 and chose JSoup for parsing the HTML.  The only con is that this program will have to rely on an external library in order to run.
+		
+	There were many ways to find the image format:
+		1. Use ImageIO (from javax) and extract the image format using one of its methods.  
+		2. Compare the image path with a set of common image formats.  
+		
+		I did not choose ImageIO method because upon reading its documentation, I realized it did not support some recent web image formats like SVG.  I also did not choose the comparison method because it relied on a certain bias as to what's "common" for an image format.  What I wanted was for the image format to be as flexible as possible.  Thus, I chose to extract the extension from the image path and use that as the image format.  The only con is that the extension could be malformed, which was a trade-off I was willing to make in order to ensure the program's flexibility.
     
 USAGE
 
