@@ -52,6 +52,7 @@ public class ImgDownloader {
             final String imgTag = "<img";
             final String imgSrcAttributeName = "src";
             String imgSrc = "";
+            int quoteCount = 1;
             boolean containsImgTag = false;
             
              URL myURL = new URL("http://pages.uoregon.edu/szeyan/");
@@ -65,7 +66,19 @@ public class ImgDownloader {
                  if(line.contains(imgTag)){
                      containsImgTag = true;
                      if(line.contains(imgSrcAttributeName)){
-                         System.out.println(inputLine);
+                        int srcIndex = line.indexOf(imgSrcAttributeName);
+                        if(line.charAt(srcIndex - 1) != '-'){
+                            //this is not a data-src attribute
+                            //grab the rest of the string for the src path
+                            System.out.println(line);
+                            int beginSrcPathIndex = line.indexOf('\"', srcIndex);
+                            //line = inputLine.substring(srcIndex + 3);
+                            int endSrcPathIndex = line.indexOf('\"', beginSrcPathIndex+1);
+                            
+                            line = inputLine.substring(beginSrcPathIndex+1, endSrcPathIndex);
+                            System.out.println(line);
+    
+                        }
                      }
                  }
              }
