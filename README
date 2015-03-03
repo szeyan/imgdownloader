@@ -15,6 +15,8 @@ REFERENCES/TOOLS
 		http://stackoverflow.com/questions/4871051/getting-the-current-working-directory-in-java
     Opening and Parsing URL
 		http://docs.oracle.com/javase/tutorial/networking/urls/connecting.html
+	Downloading an image from an URL
+		http://stackoverflow.com/questions/5882005/how-to-download-image-from-any-web-page-in-java
 		
 RELEVANT FILES
     README                  - this file

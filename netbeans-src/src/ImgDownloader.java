@@ -1,8 +1,10 @@
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -16,7 +18,7 @@ public class ImgDownloader {
     public static final String DEFAULT_PATH = System.getProperty("user.dir");
 
     public static void main(String args[]) {
-        String url = "";            //URL to web site to download the images from
+        URL url;                    //URL to web site to download the images from
         String localPath = "";      //local path to save all the images to
         Boolean overwrite = false;  //flag that specifies whether to overwrite existing files
         String properUsage = "Proper Usage: java ImgDownloader <URL> [<Local Path>] [-ow] ";
@@ -36,23 +38,35 @@ public class ImgDownloader {
             //URL myURL = new URL(args[0]);
             //URLConnection myURLConnection = myURL.openConnection();
             //myURLConnection.connect();
-            
-            URL oracle = new URL("http://www.oracle.com/");
-            BufferedReader in = new BufferedReader(
-            new InputStreamReader(oracle.openStream()));
+            /*
+             URL myURL = new URL("http://pages.uoregon.edu/szeyan/");
+             BufferedReader in = new BufferedReader(
+             new InputStreamReader(myURL.openStream()));
 
-            String inputLine;
-            while ((inputLine = in.readLine()) != null)
-                System.out.println(inputLine);
+             String inputLine;
+             while ((inputLine = in.readLine()) != null)
+             System.out.println(inputLine);
+             in.close();*/
+
+            url = new URL("http://pages.uoregon.edu/szeyan/img/ml.png");
+            InputStream in = new BufferedInputStream(url.openStream());
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int length = 0;
+            while((length = in.read(buffer)) != -1){
+                out.write(buffer, 0, length);
+            }
+
+            out.close();
             in.close();
-            
-            
-        } catch (MalformedURLException e) {
-             // new URL() failed
-            e.printStackTrace();
-            System.exit(1);
-        } catch (IOException e) {
-             // openConnection() failed
+            byte[] response = out.toByteArray();
+
+            FileOutputStream fos = new FileOutputStream("C://borrowed_image.png");
+            fos.write(response);
+            fos.close();
+
+        } catch (Exception e) {
+            //ie: MalformedURLException where new URL() failed
             e.printStackTrace();
             System.exit(1);
         }
