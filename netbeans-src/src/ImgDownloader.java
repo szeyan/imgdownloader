@@ -98,7 +98,6 @@ public class ImgDownloader {
         }
 
         //download the images to local path
-        //use timestamp if overwrite is not set
         //use thread 
         InputStream in = new BufferedInputStream(url.openStream());
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -114,6 +113,9 @@ public class ImgDownloader {
         in.close();
         byte[] response = out.toByteArray();
 
+        Runnable r = new MyThread("hello");
+        new Thread(r).start();
+
         String path = this.localPath + File.separator + this.getSaveAsName("blue.png");
         FileOutputStream fos = new FileOutputStream(path);
         fos.write(response);
@@ -125,12 +127,24 @@ public class ImgDownloader {
      * @return the image name if the overwrite flag is true
      *         the timestamp concatenated to the image name if overwrite flag is false
      */
-    private String getSaveAsName(String imgName) { 
+    private String getSaveAsName(String imgName) {
         if (this.overwrite) {
             return imgName;
         } else {
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+            String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis());
             return timeStamp + "_" + imgName;
+        }
+
+    }
+
+    private class MyThread implements Runnable {
+        private String hello;
+        public MyThread(String hello) {
+            this.hello = hello;
+        }
+
+        public void run() {
+            System.out.println("Create Thread " + hello);
         }
     }
 
