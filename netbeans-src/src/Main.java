@@ -42,6 +42,7 @@ public class Main {
 
             System.out.println("Website URL: \t" + imgDownloader.getURL());
             System.out.println("Desination: \t" + imgDownloader.getLocalPath());
+            System.out.println("Overwrite: \t" + imgDownloader.willOverwrite());
             System.out.println();
 
             imgDownloader.downloadImages();
