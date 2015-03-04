@@ -19,6 +19,7 @@ REFERENCES/TOOLS
 	Downloading an image from an URL
 		http://stackoverflow.com/questions/5882005/how-to-download-image-from-any-web-page-in-java
 		http://www.java2s.com/Code/Java/File-Input-Output/UseBufferedInputStreamandBufferedOutputStreamtocopybytearray.htm
+		http://stackoverflow.com/questions/2725156/complete-list-of-html-tag-attributes-which-have-a-url-value
 		
 RELEVANT FILES
     README                  - this file
@@ -26,10 +27,9 @@ RELEVANT FILES
     
 NOTES/FEATURES
 	This program allows the user to do the following:
-		- Specify the URL to download from in a few ways:
+		- Specify the URL to download from in two ways:
 			- the full path (ie: http://pages.uoregon.edu/szeyan/index.html)
 			- or the base path (ie: http://pages.uoregon.edu/szeyan/)
-			- or the image path itself (ie: http://pages.uoregon.edu/szeyan/img/ml.png)
 		- Optionally choose the local path to save the images to:
 			- ie: C:\Users\Melody\Downloads
 			- if the local path is not specified, the images will be saved in the same directory as the program
