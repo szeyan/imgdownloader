@@ -27,10 +27,9 @@ RELEVANT FILES
     
 NOTES/FEATURES
 	This program allows the user to do the following:
-		- Specify the URL to download from in three ways:
+		- Specify the URL to download from in two ways:
 			- the full path (ie: http://pages.uoregon.edu/szeyan/index.html)
 			- or the base path (ie: http://pages.uoregon.edu/szeyan/)
-			- or the image path (ie: http://pages.uoregon.edu/szeyan/ml.png)
 		- Optionally choose the local path to save the images to:
 			- ie: C:\Users\Melody\Downloads
 			- if the local path is not specified, the images will be saved in the same directory as the program

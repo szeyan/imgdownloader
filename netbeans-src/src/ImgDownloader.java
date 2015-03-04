@@ -9,11 +9,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -51,8 +52,8 @@ public class ImgDownloader {
     public ImgDownloader(URL urlOther) throws MalformedURLException {
         String path = urlOther.getFile().substring(0, urlOther.getFile().lastIndexOf('/'));
         String base = urlOther.getProtocol() + "://" + urlOther.getHost() + path;
-        
-        this.url = new URL(base);   
+
+        this.url = new URL(base);
     }
 
     /**
@@ -109,7 +110,7 @@ public class ImgDownloader {
      *
      * @throws IOException if gatherImgElements() could not establish a connection with the website
      */
-    public void downloadImages() throws IOException {
+    public void downloadImages() throws IOException, URISyntaxException {
         if (!isParsed) {
             gatherImgElements();
             isParsed = true;
@@ -126,12 +127,10 @@ public class ImgDownloader {
     /*  extract the IMG elements from the website.
      filter the extracted IMG elements for ones with defined source paths.
      correct the image source paths with absolute paths. */
-    private ArrayList<String> gatherImgElements() throws IOException {
+    private void gatherImgElements() throws IOException, URISyntaxException {
 
-        ArrayList<String> imgElements = new ArrayList<String>();
         String container = "";
         boolean foundImgTag = false;
-
 
         /*  Open a connection to the website and search for all IMG elements
          (note: try-with-resources will automatically closes any streams) */
@@ -164,7 +163,6 @@ public class ImgDownloader {
 
                         if (!srcPath.isEmpty()) {
                             // fix any relative paths and stores the srcPath into the map "images"
-                            System.out.println(srcPath);
                             storeSrcPath(srcPath);
 
                         }
@@ -176,7 +174,6 @@ public class ImgDownloader {
                 }
             }
         }
-        return imgElements;
     }
 
     private boolean containsImgTag(String line) {
@@ -201,8 +198,22 @@ public class ImgDownloader {
         return "";
     }
 
-    private void storeSrcPath(String srcPath) {
+    private void storeSrcPath(String srcPath) throws URISyntaxException {
+        URI uri = new URI(srcPath);
 
+        if (!uri.isAbsolute()) {
+            //srcPath is relative. Make it absolute
+            URI a = new URI("http://www.foo.com/bee/bar");
+            URI b = new URI("../bar.html");
+            URI c = a.resolve(b);
+
+            System.out.println(c.toString());
+            this.url.toURI().resolve(uri);
+            System.out.println(this.url.toURI().resolve(uri));
+        }
+
+        //an absolute path is URL concatenated with the relative path
+        //an image name is the last index of a '/' to the end of the srcPath
     }
 
     /**
