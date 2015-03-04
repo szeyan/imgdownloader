@@ -12,7 +12,6 @@ public class Main {
         ImgDownloader imgDownloader;
         String usage = "Proper Usage: java Main <URL> [<Local Path>] [-ow] ";
 
-        //Program requires at least 1 argument but no more than 3
         if (args.length < 1 || args.length > 3) {
             System.err.println(usage);
             System.err.println("ie: java Main "
@@ -23,15 +22,12 @@ public class Main {
         }
 
         try {
-            //Parse URL - args[0]
             imgDownloader = new ImgDownloader(args[0]);
 
-            //Parse Local Path - args[1]
             if (args.length > 1) {
                 imgDownloader.setLocalPath(args[1]);
             }
 
-            //Parse overwrite flag - args[2]
             if (args.length > 2) {
                 if (args[2].toLowerCase().equals("-ow")) {
                     imgDownloader.setOverwrite(true);

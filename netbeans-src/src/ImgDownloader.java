@@ -49,8 +49,6 @@ public class ImgDownloader {
      * @throws MalformedURLException if the URL is not written in a correct format
      */
     public ImgDownloader(String urlOther) throws MalformedURLException {
-        /* add a trailing slash to the given URL 
-         if it does not point to a file (ie: index.html) or to a query (ie: ?id=123) */
         if (urlOther.charAt(urlOther.length() - 1) != '/') {
             int lastSlash = urlOther.lastIndexOf('/');
             int dot = urlOther.lastIndexOf('.');
@@ -83,7 +81,6 @@ public class ImgDownloader {
      * @throws IllegalArgumentException if the specified directory does not exist
      */
     public void setLocalPath(String path) throws IllegalArgumentException {
-        //remove a trailing quote that's caused by /" 
         if(path.charAt(path.length() - 1 ) == '"'){
             path = path.substring(0 , path.length() - 1);
         }
@@ -128,7 +125,6 @@ public class ImgDownloader {
             this.isParsed = true;
         }
 
-        //Create a thread to download each image
         for (Map.Entry<String, URL> img : this.images.entrySet()) {
             Runnable r = new SaveImageThread(img.getKey(), img.getValue());
             new Thread(r).start();
@@ -149,28 +145,22 @@ public class ImgDownloader {
         String container = "";
         boolean foundImgTag = false;
 
-        /*  Open a connection to the website and search for all IMG elements
-         (note: try-with-resources will automatically closes any streams) */
         try (BufferedReader in = new BufferedReader(new InputStreamReader(this.url.openStream()))) {
 
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
 
-                //Used to skip current line of HTML until an IMG tag is found
                 if (inputLine.toLowerCase().contains("<img")) {
                     foundImgTag = true;
                 }
 
-                //Save the inputLines until the end of an IMG tag has been found
                 if (foundImgTag) {
                     container += inputLine;
 
-                    //See if the end of an IMG tag has been found
                     int imgTagBegin = container.indexOf("<img");
                     int imgTagEnd = container.indexOf('>', imgTagBegin);
                     if (imgTagEnd != -1) {
 
-                        //Look for a src path inside this IMG element
                         String imgElement = container.substring(imgTagBegin, imgTagEnd + 1);
                         String srcPath = this.findSrcPath(imgElement);
 
@@ -178,7 +168,6 @@ public class ImgDownloader {
                             this.storeSrcPath(srcPath);
                         }
 
-                        //See if current string contains more IMG elements
                         container = container.substring(imgTagEnd);
                         foundImgTag = container.toLowerCase().contains("<img");
                     }
@@ -188,7 +177,7 @@ public class ImgDownloader {
     }
 
     /**
-     * Finds the image source path from given IMG tag based on the "src" attribute
+     * Finds the image source path from given IMG tag based on the "src" attribute.
      *
      * @param img an HTML string containing the IMG tag
      * @return a source path for the image if it was found or an empty string if it wasn't
@@ -196,15 +185,12 @@ public class ImgDownloader {
     private String findSrcPath(String img) {
         int srcIndex = img.toLowerCase().indexOf("src");
         if (srcIndex != -1) {
-
-            //make sure this srcIndex doesn't belong to a "data-src" attribute
             if (img.charAt(srcIndex - 1) != '-') {
                 int srcPathBegin = img.indexOf('\"', srcIndex);
                 int srcPathEnd = img.indexOf('\"', srcPathBegin + 1);
                 
                 String ret = img.substring(srcPathBegin + 1, srcPathEnd).trim();
                 
-                //remove any trailing \ caused by IMG tags found inside scripts
                 if(ret.charAt(ret.length() - 1) == '\\'){
                     ret = ret.substring(0 , ret.length() - 1).trim();
                 }
@@ -229,7 +215,6 @@ public class ImgDownloader {
         URI uri = new URI(srcPath);
 
         if (!uri.isAbsolute()) {
-            //srcPath is relative. Make it absolute
             uri = this.url.toURI().resolve(uri);
         }
 
@@ -283,20 +268,13 @@ public class ImgDownloader {
          * A status message will be printed out indicating download success or failure.
          */
         public void run() {
-            //Concatenate the local destination path and the name to save the image as
             String saveAs = localPath + File.separator + getSaveAsName(this.imgName);
 
-            /*  Download the image
-             (note: try-with-resources will automatically closes any streams) */
             try (
-                //Open a connection to the image source URL and get the input stream
                 InputStream in = new BufferedInputStream(this.imgSrcUrl.openStream());
-                    
-                //Create a stream for writing out the data to the "saveAs" path
                 OutputStream out = new BufferedOutputStream(new FileOutputStream(saveAs))
             ) {
 
-                //Read in the image data in chunks and write it out in chunks to disk
                 byte[] buffer = new byte[1024];
                 int length = 0;
                 while ((length = in.read(buffer)) != -1) {
@@ -306,7 +284,6 @@ public class ImgDownloader {
                 System.out.println("Download SUCCESS -- " + this.imgSrcUrl);
 
             } catch (Exception e) {
-                //Ignore any errors if an image fails to download/save.
                 System.out.println("Download FAILURE -- " + this.imgSrcUrl);
             }
         }
