@@ -123,9 +123,9 @@ public class ImgDownloader {
      * @throws URISyntaxException if the URI is not written in a correct format
      */
     public void downloadImages() throws IOException, URISyntaxException {
-        if (!isParsed) {
+        if (!this.isParsed) {
             this.gatherImgElements();
-            isParsed = true;
+            this.isParsed = true;
         }
 
         //Create a thread to download each image
