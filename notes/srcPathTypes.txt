@@ -22,3 +22,5 @@ Types of src path layouts:
 	img/in5.png
 
 	" alt="Linkedin5" />
+	
+	<img class="linkedin"src="img/in1.png" /><img class="linkedin"src="img/in1.png" alt="Linkedin1" />

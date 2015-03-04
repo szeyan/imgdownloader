@@ -49,12 +49,12 @@ public class ImgDownloader {
      * @throws MalformedURLException if the URL is not written in a correct format
      */
     public ImgDownloader(String urlOther) throws MalformedURLException {
-        //append a slash to the end of the given URL if it doesn't exist
+        /* add a trailing slash to the given URL 
+         if it does not point to a file (ie: index.html) or to a query (ie: ?id=123) */
         if (urlOther.charAt(urlOther.length() - 1) != '/') {
             int lastSlash = urlOther.lastIndexOf('/');
-            int lastDot = urlOther.lastIndexOf('.');
-
-            if (lastSlash > lastDot) {
+            int dot = urlOther.lastIndexOf('.');
+            if ((lastSlash > dot)  && !urlOther.contains("?")) {
                 urlOther += '/';
             }
         }
@@ -306,5 +306,4 @@ public class ImgDownloader {
             }
         }
     }
-
 }

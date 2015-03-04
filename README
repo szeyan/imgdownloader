@@ -11,6 +11,7 @@ DESCRIPTION
 RELEVANT FILES
     README                  - this file
 	netbeans-src/			- folder that contains the NetBeans project
+	notes/					- folder that contains additional notes
 	ImgDownloader.java		- a class that Main.java uses to download the images
 	Main.java				- main driver for this program
 	

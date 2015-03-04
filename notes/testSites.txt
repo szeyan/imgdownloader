@@ -1,0 +1,12 @@
+java Main "http://pages.uoregon.edu/szeyan/index.html" "C:\Users\Melody\Downloads\New Folder"
+java Main "http://pages.uoregon.edu/szeyan/index.html" "C:\Users\Melody\Downloads\New Folder" -ow
+java Main "http://pages.uoregon.edu/szeyan/" "C:\Users\Melody\Downloads\New Folder"
+java Main "http://pages.uoregon.edu/szeyan" "C:\Users\Melody\Downloads\New Folder"
+java Main "http://pages.uoregon.edu/szeyan" "C:\Users\Melody\Downloads\New Folder\"
+
+java Main "http://www.cs.uoregon.edu/Classes/13W/cis445/schedule.html" "C:\Users\Melody\Downloads\New Folder"
+
+java Main "http://getbootstrap.com/2.3.2/index.html" "C:\Users\Melody\Downloads\New Folder"
+
+java Main "http://uoregon.edu/" "C:\Users\Melody\Downloads\New Folder"
+
