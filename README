@@ -28,7 +28,7 @@ NOTES/FEATURES
         - Optionally choose whether to overwrite existing images if they exist in the destination directory
             - if overwrite (ie: "-ow") is not specified, the images will be saved with a timestamp to prevent overwrites
     
-    The program finds the images to download by searching for IMG elements within the website.  Specifically, it will look for the "src" attribute within the IMG element; this also includes IMG elements found in scripts.  Additionally, if the source path contains ".../" for a prior directory or is a relative path, the program will correct the path and download the image. If the "src" is not specified or if the image fails to download, the program will simply move onto the next IMG element.  
+    The program finds the images to download by searching for IMG elements within the website.  Specifically, it will look for the "src" attribute within the IMG element; this also includes IMG elements found in scripts.  Additionally, if the source path contains "../" for a prior directory or is a relative path, the program will correct the path and download the image. If the "src" is not specified or if the image fails to download, the program will simply move onto the next IMG element.  
     
     In short, the program will not crash if it fails to download an image.
     
