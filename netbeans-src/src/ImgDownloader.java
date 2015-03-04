@@ -39,7 +39,7 @@ public class ImgDownloader {
     /* flag that specifies whether IMG tags have been parsed from the URL */
     private Boolean isParsed = false;
 
-    /* a storage that maps the names of the parsed images to their source paths */
+    /* a map of the names of the parsed images to their source paths */
     private Map<String, URL> images = new HashMap<String, URL>();
 
     /**
@@ -90,7 +90,8 @@ public class ImgDownloader {
     }
 
     /**
-     * Sets whether to overwrite existing images that have the same names as the newly downloaded images
+     * Sets whether to overwrite existing images that
+     * have the same names as the newly downloaded images
      *
      * @param overwrite is whether to overwrite existing images
      */
@@ -103,22 +104,15 @@ public class ImgDownloader {
      * Parses through the website for img tags and img source paths only once.
      * Makes a thread to download each image.
      *
-     * @throws IOException if connection with the website cannot be established
+     * @throws IOException if gatherImgElements() could not establish a connection with the website
      */
     public void downloadImages() throws IOException {
         if (!isParsed) {
-
-            /*  search through the website (from the URL) and extract the IMG elements.
-             filter the extracted IMG elements for ones with defined source paths.
-             correct the image source paths with absolute paths. */
             gatherImgElements();
-            //ArrayList<String> imgSrcPaths = gatherImgSrcPaths(imgElements);
-            //setImgSrcPathsAndNames();
-
             isParsed = true;
         }
 
-        //For each image found, create a thread to download the image
+        //Create a thread to download each image
         for (Map.Entry<String, URL> img : this.images.entrySet()) {
             Runnable r = new SaveImageThread(img.getKey(), img.getValue());
             new Thread(r).start();
@@ -126,6 +120,9 @@ public class ImgDownloader {
 
     }
 
+    /*  extract the IMG elements from the website.
+     filter the extracted IMG elements for ones with defined source paths.
+     correct the image source paths with absolute paths. */
     private ArrayList<String> gatherImgElements() throws IOException {
 
         ArrayList<String> imgElements = new ArrayList<String>();
@@ -145,8 +142,8 @@ public class ImgDownloader {
             while ((inputLine = in.readLine()) != null) {
 
                 //A flag to skip over lines until an IMG tag is found
-                if(containsImgTag(inputLine)){
-                    foundImgTag = true;  
+                if (containsImgTag(inputLine)) {
+                    foundImgTag = true;
                 }
 
                 //Save the inputLines until the end of an IMG tag has been found
@@ -160,7 +157,14 @@ public class ImgDownloader {
 
                         //Look for a src path inside this IMG element
                         String imgElement = container.substring(imgTagBegin, imgTagEnd + 1);
-                        findSrcPath(imgElement);
+                        String srcPath = findSrcPath(imgElement);
+
+                        if (!srcPath.isEmpty()) {
+                            // fix any relative paths and stores the srcPath into the map "images"
+                            System.out.println(srcPath);
+                            storeSrcPath(srcPath);
+
+                        }
 
                         //See if current string contains more IMG elements
                         container = container.substring(imgTagEnd);
@@ -176,51 +180,24 @@ public class ImgDownloader {
         return line.toLowerCase().contains("<img");
     }
 
-    private void findSrcPath(String imgElements) {
-
-        String imgElement = "<img class=\"linkedin\"src=\"img/in5.png\" alt=\"Linkedin5\" />";
-
+    private String findSrcPath(String img) {
         //find the src path for this image
-        int srcIndex = imgElement.toLowerCase().indexOf("src");
+        int srcIndex = img.toLowerCase().indexOf("src");
         if (srcIndex != -1) {
             //make sure src attribute is not a data-src attribute
-            if (imgElement.charAt(srcIndex - 1) != '-') {
-                int srcPathBegin = imgElement.indexOf('\"', srcIndex);
-                int srcPathEnd = imgElement.indexOf('\"', srcPathBegin + 1);
-                String srcPath = imgElement.substring(srcPathBegin + 1, srcPathEnd).trim();
-                System.out.println(srcPath);
+            if (img.charAt(srcIndex - 1) != '-') {
+
+                //return the src path
+                int srcPathBegin = img.indexOf('\"', srcIndex);
+                int srcPathEnd = img.indexOf('\"', srcPathBegin + 1);
+                return img.substring(srcPathBegin + 1, srcPathEnd).trim();
             }
-        } 
+        }
+
+        //src path wasn't found for this string
+        return "";
     }
 
-    /*
-     //check to see if it has more images
-        
-          
-     //An image's src attribute was found in a previous line or this line
-     if (foundSrcAttrib) {
-
-     //try to find the src end path in this same line
-     beginSrcPathIndex = line.indexOf('\"', srcIndex);   
-     if (beginSrcPathIndex != -1) {
-     int endSrcPathIndex = line.indexOf('\"', beginSrcPathIndex + 1);
-     if (endSrcPathIndex != -1) {
-     imgSrc = inputLine.substring(beginSrcPathIndex + 1, endSrcPathIndex).trim();
-     System.out.println(imgSrc);
-     System.out.println("---");
-     //reset search parameters 
-     imgSrc = "";
-     srcIndex = -1;
-     foundImgTag = false;
-     foundSrcAttrib = false;
-     }
-
-     }
-
-     } */
-    private void setImgSrcPathsAndNames(ArrayList<String> imgSrcPaths) {
-
-    }
 
     /**
      * @param imgName name of the image
