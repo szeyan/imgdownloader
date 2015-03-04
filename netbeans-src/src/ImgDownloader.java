@@ -8,8 +8,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -35,7 +34,7 @@ public class ImgDownloader {
     private Boolean isParsed = false;
 
     /* a storage that maps the names of the parsed images to their source paths */
-    private Map<String, URL> urlSet = new LinkedHashMap<String, URL>();
+    private Map<String, URL> urlSet = new HashMap<String, URL>();
 
     /**
      * Constructor takes in a String to a website
@@ -89,37 +88,23 @@ public class ImgDownloader {
     /**
      * TODO
      * Downloads all the images based on a given URL and local path.
+     * Makes a thread to download each image.
      *
      * @throws IOException if the images cannot be downloaded
      */
-    public void downloadImages() throws IOException {
+    public void downloadImages() throws MalformedURLException {
         if (!isParsed) {
             //search through the website (from the URL) and extract the image names and source paths
         }
 
-        //download the images to local path
-        //use thread 
-        InputStream in = new BufferedInputStream(url.openStream());
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int length = 0;
+        URL one = new URL("http://pages.uoregon.edu/szeyan/img/in.png");
+        URL two = new URL("http://pages.uoregon.edu/szeyan/img/m.png");
 
-        //Read in and write out the image data in chunks
-        while ((length = in.read(buffer)) != -1) {
-            out.write(buffer, 0, length);
-        }
-
-        out.close();
-        in.close();
-        byte[] response = out.toByteArray();
-
-        Runnable r = new MyThread("hello");
-        new Thread(r).start();
-
-        String path = this.localPath + File.separator + this.getSaveAsName("blue.png");
-        FileOutputStream fos = new FileOutputStream(path);
-        fos.write(response);
-        fos.close();
+        //For each image found, create a thread to download the image
+        Runnable r1 = new SaveImageThread(one, "blue.png");
+        new Thread(r1).start();
+        Runnable r2 = new SaveImageThread(two, "blue2.png");
+        new Thread(r2).start();
     }
 
     /**
@@ -137,14 +122,66 @@ public class ImgDownloader {
 
     }
 
-    private class MyThread implements Runnable {
-        private String hello;
-        public MyThread(String hello) {
-            this.hello = hello;
+    /**
+     * Inner class is used to save an image.
+     */
+    private class SaveImageThread implements Runnable {
+
+        /* the URL of where the image is located on the internet */
+        private URL imgSrcUrl;
+
+        /* name of the image */
+        private String imgName;
+
+        /**
+         * Constructor that takes in an image source URL and an image name
+         *
+         * @param imgSrcUrl image source URL
+         * @param imgName   image name
+         */
+        public SaveImageThread(URL imgSrcUrl, String imgName) {
+            this.imgSrcUrl = imgSrcUrl;
+            this.imgName = imgName;
         }
 
+        /**
+         * Downloads the image and writes the image to the local path (provided by the outer class).
+         * A timestamp will be appended to the provided image name
+         * if the user specified not to overwrite existing files.
+         * A status message will be printed out indicating download success or failure.
+         */
         public void run() {
-            System.out.println("Create Thread " + hello);
+
+            try {
+                //Open a connection to the image source URL and get the input stream
+                InputStream in = new BufferedInputStream(this.imgSrcUrl.openStream());
+
+                //Read in the image data in chunks and write it to the output stream
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int length = 0;
+                while ((length = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, length);
+                }
+                out.close();
+                in.close();
+
+                //Save the image data to the local path (provided by the outer class)
+                byte[] bytes = out.toByteArray();
+                String path = localPath + File.separator + getSaveAsName(this.imgName);
+                FileOutputStream fos = new FileOutputStream(path);
+                fos.write(bytes);
+                fos.close();
+
+                //Print success status message
+                System.out.println("Downloading " + this.imgName + " from " + this.imgSrcUrl
+                        + "\t-- Success");
+
+            } catch (Exception e) {
+                //Ignore the image if it failed to download.  Print a failure status message.
+                System.out.println("Downloading " + this.imgName + " from " + this.imgSrcUrl
+                        + "\t-- Failure");
+            }
         }
     }
 
