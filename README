@@ -18,6 +18,7 @@ REFERENCES/TOOLS
 		http://stackoverflow.com/questions/6013628/how-to-fetch-base-url-from-the-given-url-using-java
 	Downloading an image from an URL
 		http://stackoverflow.com/questions/5882005/how-to-download-image-from-any-web-page-in-java
+		http://www.java2s.com/Code/Java/File-Input-Output/UseBufferedInputStreamandBufferedOutputStreamtocopybytearray.htm
 		
 RELEVANT FILES
     README                  - this file

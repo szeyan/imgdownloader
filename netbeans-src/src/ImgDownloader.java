@@ -1,20 +1,23 @@
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
-import static java.lang.System.out;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
- * This class can take an URL to a website and a local destination path and downloads all image files based on <IMG> tags.
+ * This class can take an URL to a website and a local destination path
+ * and downloads all image files based on <IMG> tags.
  *
  * @author Sze Yan Li
  */
@@ -36,7 +39,7 @@ public class ImgDownloader {
     private Boolean isParsed = false;
 
     /* a storage that maps the names of the parsed images to their source paths */
-    private Map<String, URL> urlSet = new HashMap<String, URL>();
+    private Map<String, URL> images = new HashMap<String, URL>();
 
     /**
      * Constructor takes in a String to a website
@@ -95,25 +98,81 @@ public class ImgDownloader {
     }
 
     /**
-     * TODO
      * Downloads all the images based on a given URL and local path.
+     * Parses through the website for img tags and img source paths only once.
      * Makes a thread to download each image.
-     *
-     * @throws IOException if the images cannot be downloaded
      */
     public void downloadImages() throws MalformedURLException {
         if (!isParsed) {
-            //search through the website (from the URL) and extract the image names and source paths
+            /*  search through the website (from the URL) and extract the IMG tags.
+             filter the extracted IMG tags for ones with defined source paths.
+             correct the image source paths with absolute paths. */
+            //ArrayList imgTags = gatherImgTags();
+            //ArrayList imgSrcPaths = gatherImgSrcPaths(imgTags);
+            //setImgSrcPathsAndNames(imgSrcPaths);
+
+            isParsed = true;
         }
 
         URL one = new URL("http://pages.uoregon.edu/szeyan/img/in.png");
         URL two = new URL("http://pages.uoregon.edu/szeyan/img/ml.png");
 
-        //For each image found, create a thread to download the image
-        Runnable r1 = new SaveImageThread(one, "blue1.png");
-        new Thread(r1).start();
-        Runnable r2 = new SaveImageThread(two, "blue.png");
-        new Thread(r2).start();
+        images.put("1.png", one);
+        images.put("2.png", two);
+
+        for (Map.Entry<String, URL> img : images.entrySet()) {
+            //For each image found, create a thread to download the image
+            Runnable r = new SaveImageThread(img.getKey(), img.getValue());
+            new Thread(r).start();
+        }
+
+    }
+
+    private ArrayList<String> gatherImgTags() {
+        ArrayList<String> imgTags = new ArrayList<String>();
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(this.url.openStream()));
+
+            final String imgTag = "<img";
+            String imgElement = "";
+            boolean foundImgTag = false;
+
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                String line = inputLine.toLowerCase();
+
+                //Look for an img tag within this line
+                if (line.contains(imgTag)) {
+                    foundImgTag = true;
+                }
+
+                if (foundImgTag) {
+                    imgElement += inputLine;
+                    int imgTagIndex = imgElement.indexOf(imgTag);
+                    if (imgElement.indexOf('>', imgTagIndex) != -1) {
+
+                        System.out.println(imgElement);
+                        imgElement = "";
+                        foundImgTag = false;
+                    }
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
+        return imgTags;
+
+    }
+
+    private ArrayList<String> gatherImgSrcPaths(ArrayList<String> imgTags) {
+        ArrayList<String> imgSrcPaths = new ArrayList<String>();
+
+        return imgSrcPaths;
+    }
+
+    private void setImgSrcPathsAndNames(ArrayList<String> imgSrcPaths) {
+
     }
 
     /**
@@ -145,12 +204,12 @@ public class ImgDownloader {
         /**
          * Constructor that takes in an image source URL and an image name
          *
-         * @param imgSrcUrl image source URL
          * @param imgName   image name
+         * @param imgSrcUrl image source URL
          */
-        public SaveImageThread(URL imgSrcUrl, String imgName) {
-            this.imgSrcUrl = imgSrcUrl;
+        public SaveImageThread(String imgName, URL imgSrcUrl) {
             this.imgName = imgName;
+            this.imgSrcUrl = imgSrcUrl;
         }
 
         /**
@@ -162,16 +221,14 @@ public class ImgDownloader {
         public void run() {
             //Concatenate the local destination path and the name to save the image as
             String saveAs = localPath + File.separator + getSaveAsName(this.imgName);
-            
+
             /*  Download the image 
-                (note: try-with-resources will automatically close the streams) */
+             (note: try-with-resources will automatically close the streams) */
             try (
                     //Open a connection to the image source URL and get the input stream
                     InputStream in = new BufferedInputStream(this.imgSrcUrl.openStream());
-                    
                     //Create a stream for writing out the data to the "saveAs" path
-                    OutputStream out = new BufferedOutputStream(new FileOutputStream(saveAs))
-            ) {
+                    OutputStream out = new BufferedOutputStream(new FileOutputStream(saveAs))) {
 
                 //Read in the image data in chunks and write it out in chunks to disk
                 byte[] buffer = new byte[1024];
