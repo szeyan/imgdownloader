@@ -1,6 +1,4 @@
 
-import java.net.URL;
-
 /**
  * The Main class parses the arguments and creates an ImgDownloader object
  * to download all the images from a given URL
@@ -46,11 +44,9 @@ public class Main {
             System.out.println("Desination: \t" + imgDownloader.getLocalPath());
             System.out.println();
 
-            //Download all the images now that the arguments are set
             imgDownloader.downloadImages();
 
         } catch (Exception e) {
-            //ie: MalformedURLException where setting URL failed
             e.printStackTrace();
             System.exit(1);
         }

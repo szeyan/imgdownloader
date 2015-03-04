@@ -40,25 +40,25 @@ public class ImgDownloader {
     private Boolean isParsed = false;
 
     /* a map of the names of the parsed images to their source paths */
-    private Map<String, URL> images = new HashMap<String, URL>();
+    private Map<String, URL> images = new HashMap<>();
 
     /**
      * Constructor takes in a String to a website
      *
      * @param urlOther URL to a website to download the images from
-     * @throws MalformedURLException if URL is not written in a correct format
+     * @throws MalformedURLException if the URL is not written in a correct format
      */
     public ImgDownloader(String urlOther) throws MalformedURLException {
         //append a slash to the end of the given URL if it doesn't exist
-        if(urlOther.charAt(urlOther.length() - 1) != '/'){
+        if (urlOther.charAt(urlOther.length() - 1) != '/') {
             int lastSlash = urlOther.lastIndexOf('/');
             int lastDot = urlOther.lastIndexOf('.');
-            
-            if(lastSlash > lastDot){
+
+            if (lastSlash > lastDot) {
                 urlOther += '/';
             }
         }
-        
+
         this.url = new URL(urlOther);
     }
 
@@ -103,7 +103,7 @@ public class ImgDownloader {
      * Sets whether to overwrite existing images that
      * have the same names as the newly downloaded images
      *
-     * @param overwrite is whether to overwrite existing images
+     * @param overwrite whether to overwrite existing images
      */
     public void setOverwrite(Boolean overwrite) {
         this.overwrite = overwrite;
@@ -114,7 +114,8 @@ public class ImgDownloader {
      * Parses through the website for img tags and img source paths only once.
      * Makes a thread to download each image.
      *
-     * @throws IOException if gatherImgElements() could not establish a connection with the website
+     * @throws IOException        if a connection to an URL could not be established
+     * @throws URISyntaxException if the URI is not written in a correct format
      */
     public void downloadImages() throws IOException, URISyntaxException {
         if (!isParsed) {
@@ -130,9 +131,14 @@ public class ImgDownloader {
 
     }
 
-    /*  extract the IMG elements from the website.
-     filter the extracted IMG elements for ones with defined source paths.
-     correct the image source paths with absolute paths. */
+    /**
+     * Extracts the IMG elements from the website.
+     * Calls findSrcPath() to find image source paths from the IMG elements
+     * Calls storeSrcPath() to correct any relative paths and then store the paths to the "images" map
+     *
+     * @throws IOException        if a connection to an URL could not be established
+     * @throws URISyntaxException if the URI is not written in a correct format
+     */
     private void gatherImgElements() throws IOException, URISyntaxException {
 
         String container = "";
@@ -140,16 +146,12 @@ public class ImgDownloader {
 
         /*  Open a connection to the website and search for all IMG elements
          (note: try-with-resources will automatically closes any streams) */
-        try (BufferedReader in = new BufferedReader(
-                new InputStreamReader(this.url.openStream()))) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(this.url.openStream()))) {
 
-            /*  Read in the HTML line by line.
-             If an IMG tag is found, search through the next lines
-             until the entire IMG element is gathered. */
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
 
-                //A flag to skip over lines until an IMG tag is found
+                //Used to skip current line of HTML until an IMG tag is found
                 if (containsImgTag(inputLine)) {
                     foundImgTag = true;
                 }
@@ -158,7 +160,7 @@ public class ImgDownloader {
                 if (foundImgTag) {
                     container += inputLine;
 
-                    //See if the end of an IMG element has been found
+                    //See if the end of an IMG tag has been found
                     int imgTagBegin = container.indexOf("<img");
                     int imgTagEnd = container.indexOf('>', imgTagBegin);
                     if (imgTagEnd != -1) {
@@ -168,7 +170,6 @@ public class ImgDownloader {
                         String srcPath = findSrcPath(imgElement);
 
                         if (!srcPath.isEmpty()) {
-                            // fix any relative paths and stores the srcPath into the map "images"
                             storeSrcPath(srcPath);
                         }
 
@@ -181,28 +182,44 @@ public class ImgDownloader {
         }
     }
 
+    /**
+     * @param line an HTML string
+     * @return whether the line contains an IMG tag
+     */
     private boolean containsImgTag(String line) {
         return line.toLowerCase().contains("<img");
     }
 
+    /**
+     * Finds the image source path from given IMG tag based on the "src" attribute
+     *
+     * @param img an HTML string containing the IMG tag
+     * @return a source path for the image if it was found or an empty string if it wasn't
+     */
     private String findSrcPath(String img) {
-        //find the src path for this image
         int srcIndex = img.toLowerCase().indexOf("src");
         if (srcIndex != -1) {
-            //make sure src attribute is not a data-src attribute
-            if (img.charAt(srcIndex - 1) != '-') {
 
-                //return the src path
+            //make sure this srcIndex doesn't belong to a "data-src" attribute
+            if (img.charAt(srcIndex - 1) != '-') {
                 int srcPathBegin = img.indexOf('\"', srcIndex);
                 int srcPathEnd = img.indexOf('\"', srcPathBegin + 1);
                 return img.substring(srcPathBegin + 1, srcPathEnd).trim();
             }
         }
 
-        //src path wasn't found for this string
         return "";
     }
 
+    /**
+     * Stores the path and image name to the "images" map.
+     * Turns a relative path into an absolute one.
+     *
+     * @param srcPath the source path for an image
+     *
+     * @throws URISyntaxException    if the URI is not written in a correct format
+     * @throws MalformedURLException if the URL is not written in a correct format
+     */
     private void storeSrcPath(String srcPath) throws URISyntaxException, MalformedURLException {
         URI uri = new URI(srcPath);
 
@@ -211,14 +228,11 @@ public class ImgDownloader {
             uri = this.url.toURI().resolve(uri);
         }
 
-        //find the image name from the srcPath
         String imgName = srcPath.substring(srcPath.lastIndexOf('/') + 1);
 
-        //add the image source path and its name to the map "images"
         if (!images.containsKey(imgName)) {
             images.put(imgName, uri.toURL());
         }
-
     }
 
     /**
@@ -232,13 +246,11 @@ public class ImgDownloader {
         } else {
             String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis());
             return timeStamp + "_" + imgName;
-
         }
-
     }
 
     /**
-     * Inner class is used to save an image.
+     * Inner class is used to download and save an image.
      */
     private class SaveImageThread implements Runnable {
 
@@ -272,10 +284,12 @@ public class ImgDownloader {
             /*  Download the image
              (note: try-with-resources will automatically closes any streams) */
             try (
-                    //Open a connection to the image source URL and get the input stream
-                    InputStream in = new BufferedInputStream(this.imgSrcUrl.openStream());
-                    //Create a stream for writing out the data to the "saveAs" path
-                    OutputStream out = new BufferedOutputStream(new FileOutputStream(saveAs))) {
+                //Open a connection to the image source URL and get the input stream
+                InputStream in = new BufferedInputStream(this.imgSrcUrl.openStream());
+                    
+                //Create a stream for writing out the data to the "saveAs" path
+                OutputStream out = new BufferedOutputStream(new FileOutputStream(saveAs))
+            ) {
 
                 //Read in the image data in chunks and write it out in chunks to disk
                 byte[] buffer = new byte[1024];
@@ -284,13 +298,11 @@ public class ImgDownloader {
                     out.write(buffer, 0, length);
                 }
 
-                //Print success status message
-                System.out.println("Downloading " + this.imgSrcUrl + "\t-- SUCCESS");
+                System.out.println("Download SUCCESS -- " + this.imgSrcUrl);
 
             } catch (Exception e) {
-                //Ignore any errors when an image fails to download/save.  Print a failure status message.
-                System.out.println("Downloading " + this.imgSrcUrl + "\t-- FAILURE");
-
+                //Ignore any errors when an image fails to download/save.
+                System.out.println("Download FAILURE -- " + this.imgSrcUrl);
             }
         }
     }
