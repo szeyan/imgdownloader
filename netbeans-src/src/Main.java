@@ -1,4 +1,7 @@
 
+import java.net.URL;
+
+
 /**
  * The Main class parses the arguments and creates an ImgDownloader object 
  * to download all the images from a given URL 
@@ -24,7 +27,7 @@ public class Main {
  
         try {
           //Parse URL - args[0]
-          imgDownloader = new ImgDownloader(args[0]); 
+          imgDownloader = new ImgDownloader(new URL(args[0])); 
           
           //Parse Local Path - args[1]
           if(args.length > 1){

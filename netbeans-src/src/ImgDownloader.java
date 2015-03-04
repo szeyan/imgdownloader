@@ -45,11 +45,14 @@ public class ImgDownloader {
     /**
      * Constructor takes in a String to a website
      *
-     * @param url URL to a website to download the images from
+     * @param urlOther URL to a website to download the images from
      * @throws MalformedURLException if URL is not written in a correct format
      */
-    public ImgDownloader(String url) throws MalformedURLException {
-        this.url = new URL(url);
+    public ImgDownloader(URL urlOther) throws MalformedURLException {
+        String path = urlOther.getFile().substring(0, urlOther.getFile().lastIndexOf('/'));
+        String base = urlOther.getProtocol() + "://" + urlOther.getHost() + path;
+        
+        this.url = new URL(base);   
     }
 
     /**
@@ -198,6 +201,9 @@ public class ImgDownloader {
         return "";
     }
 
+    private void storeSrcPath(String srcPath) {
+
+    }
 
     /**
      * @param imgName name of the image
