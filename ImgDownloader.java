@@ -80,7 +80,7 @@ public class ImgDownloader {
     }
 
     private void gatherImgElements() throws IOException, URISyntaxException {
-
+        final String IMG_TAG = "<img";
         String container = "";
         boolean foundImgTag = false;
 
@@ -89,14 +89,14 @@ public class ImgDownloader {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
 
-                if (inputLine.toLowerCase().contains("<img")) {
+                if (inputLine.toLowerCase().contains(IMG_TAG)) {
                     foundImgTag = true;
                 }
 
                 if (foundImgTag) {
                     container += inputLine;
 
-                    int imgTagBegin = container.indexOf("<img");
+                    int imgTagBegin = container.indexOf(IMG_TAG);
                     int imgTagEnd = container.indexOf('>', imgTagBegin);
                     if (imgTagEnd != -1) {
 
@@ -108,7 +108,7 @@ public class ImgDownloader {
                         }
 
                         container = container.substring(imgTagEnd);
-                        foundImgTag = container.toLowerCase().contains("<img");
+                        foundImgTag = container.toLowerCase().contains(IMG_TAG);
                     }
                 }
             }
