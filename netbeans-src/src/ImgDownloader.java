@@ -48,11 +48,18 @@ public class ImgDownloader {
      * @param urlOther URL to a website to download the images from
      * @throws MalformedURLException if URL is not written in a correct format
      */
-    public ImgDownloader(URL urlOther) throws MalformedURLException {
-        String path = urlOther.getFile().substring(0, urlOther.getFile().lastIndexOf('/'));
-        String base = urlOther.getProtocol() + "://" + urlOther.getHost() + path;
-
-        this.url = new URL(base+"/");
+    public ImgDownloader(String urlOther) throws MalformedURLException {
+        //append a slash to the end of the given URL if it doesn't exist
+        if(urlOther.charAt(urlOther.length() - 1) != '/'){
+            int lastSlash = urlOther.lastIndexOf('/');
+            int lastDot = urlOther.lastIndexOf('.');
+            
+            if(lastSlash > lastDot){
+                urlOther += '/';
+            }
+        }
+        
+        this.url = new URL(urlOther);
     }
 
     /**
@@ -198,20 +205,20 @@ public class ImgDownloader {
 
     private void storeSrcPath(String srcPath) throws URISyntaxException, MalformedURLException {
         URI uri = new URI(srcPath);
-        
+
         if (!uri.isAbsolute()) {
             //srcPath is relative. Make it absolute
             uri = this.url.toURI().resolve(uri);
         }
-        
+
         //find the image name from the srcPath
         String imgName = srcPath.substring(srcPath.lastIndexOf('/') + 1);
-        
+
         //add the image source path and its name to the map "images"
-        if(!images.containsKey(imgName)){
+        if (!images.containsKey(imgName)) {
             images.put(imgName, uri.toURL());
         }
-        
+
     }
 
     /**

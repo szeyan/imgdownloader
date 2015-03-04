@@ -26,7 +26,7 @@ public class Main {
 
         try {
             //Parse URL - args[0]
-            imgDownloader = new ImgDownloader(new URL(args[0]));
+            imgDownloader = new ImgDownloader(args[0]);
 
             //Parse Local Path - args[1]
             if (args.length > 1) {

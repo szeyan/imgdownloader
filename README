@@ -7,32 +7,22 @@ AUTHOR
 
 DESCRIPTION
     This program takes an URL to a website and a local destination path and downloads all image files based on <IMG> tags. 
-    
-REFERENCES/TOOLS
-	NetBeans IDE 
-		https://netbeans.org/
-	Get working directory
-		http://stackoverflow.com/questions/4871051/getting-the-current-working-directory-in-java
-    Opening and Parsing URL
-		http://docs.oracle.com/javase/tutorial/networking/urls/connecting.html
-		http://stackoverflow.com/questions/6013628/how-to-fetch-base-url-from-the-given-url-using-java
-	Downloading an image from an URL
-		http://stackoverflow.com/questions/5882005/how-to-download-image-from-any-web-page-in-java
-		http://www.java2s.com/Code/Java/File-Input-Output/UseBufferedInputStreamandBufferedOutputStreamtocopybytearray.htm
-		http://stackoverflow.com/questions/2725156/complete-list-of-html-tag-attributes-which-have-a-url-value
 		
 RELEVANT FILES
     README                  - this file
-
-    
+	netbeans-src/			- folder that contains the NetBeans project
+	ImgDownloader.java		- a class that Main.java uses to download the images
+	Main.java				- main driver for this program
+	
 NOTES/FEATURES
 	This program allows the user to do the following:
-		- Specify the URL to download from in two ways:
-			- the full path (ie: http://pages.uoregon.edu/szeyan/index.html)
-			- or the base path (ie: http://pages.uoregon.edu/szeyan/)
+		- Specify the website URL in a few ways:
+			- http://pages.uoregon.edu/szeyan/index.html
+			- http://pages.uoregon.edu/szeyan/
+			- http://pages.uoregon.edu/szeyan
 		- Optionally choose the local path to save the images to:
 			- ie: C:\Users\Melody\Downloads
-			- if the local path is not specified, the images will be saved in the same directory as the program
+			- if the local path is not specified, the destination will be same directory as the program
 		- Optionally choose whether to overwrite existing images if they exist in the destination directory
 			- if overwrite (ie: "-ow") is not specified, the images will be saved with a timestamp to prevent overwrites
 	
@@ -44,6 +34,7 @@ NOTES/FEATURES
 
 	Images with the same source path within a website (multiple copies) will only be saved once.
 
+DESIGN DECISIONS		
 	There were a few ways to parse the HTML for IMG tags:
 		1. Use an 3rd party HTML parser
 		2. Use java's HTMLEditorKit and HTMLDocument classes
@@ -52,7 +43,7 @@ NOTES/FEATURES
 		
 		At first, I tried to use method #2, but then I realized it would arbitrarily skip over some elements and not work on some pages, making it very unstable.  I briefly considered #3, but immediately knew this would result in messy code and unpredictable behaviour like #2.  #1 is a good choice, and there are many reliable parsers in existence.  However, it means that my program will have to rely on a third-party for stability. 
 		
-		In the end, I chose #4 because it was easy to implement, and it allows me full control over the parsing behaviour.  
+		In the end, I chose #4 because it was easy to implement, and it allowed me full control over the parsing behaviour.  
 		
 	There were many ways to find the image format:
 		1. Use ImageIO (from javax) and extract the image format using one of its methods.  
