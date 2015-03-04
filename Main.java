@@ -1,11 +1,3 @@
-
-/**
- * The Main class parses the arguments and creates an ImgDownloader object
- * to download all the images from a given URL
- * to some local destination path on the user's system
- *
- * @author Sze Yan Li
- */
 public class Main {
 
     public static void main(String args[]) {
@@ -23,7 +15,7 @@ public class Main {
 
         try {
             imgDownloader = new ImgDownloader(args[0]);
-
+            
             if (args.length > 1) {
                 imgDownloader.setLocalPath(args[1]);
             }

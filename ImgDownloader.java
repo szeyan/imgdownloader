@@ -16,38 +16,15 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * This class can take an URL to a website and a local destination path
- * and downloads all image files based on <IMG> tags.
- *
- * @author Sze Yan Li
- */
 public class ImgDownloader {
 
-    /* Default save path is where the ImgDownloader is located */
     private static final String DEFAULT_PATH = System.getProperty("user.dir");
-
-    /* URL to a website to download the images from */
     private URL url;
-
-    /* local destination path to save all the images to */
     private String localPath = DEFAULT_PATH;
-
-    /* flag that specifies whether to overwrite existing files */
     private Boolean overwrite = false;
-
-    /* flag that specifies whether IMG tags have been parsed from the URL */
     private Boolean isParsed = false;
-
-    /* a map of the names of the parsed images to their source paths */
     private Map<String, URL> images = new HashMap<>();
 
-    /**
-     * Constructor takes in a String to a website
-     *
-     * @param urlOther URL to a website to download the images from
-     * @throws MalformedURLException if the URL is not written in a correct format
-     */
     public ImgDownloader(String urlOther) throws MalformedURLException {
         if (urlOther.charAt(urlOther.length() - 1) != '/') {
             int lastSlash = urlOther.lastIndexOf('/');
@@ -60,26 +37,14 @@ public class ImgDownloader {
         this.url = new URL(urlOther);
     }
 
-    /**
-     * @return URL to a website to download the images from
-     */
     public String getURL() {
         return this.url.toString();
     }
 
-    /**
-     * @return the local destination to save all the images to
-     */
     public String getLocalPath() {
         return this.localPath;
     }
 
-    /**
-     * Sets the local destination to save the images to
-     *
-     * @param path is where to save all the images to
-     * @throws IllegalArgumentException if the specified directory does not exist
-     */
     public void setLocalPath(String path) throws IllegalArgumentException {
         if(path.charAt(path.length() - 1 ) == '"'){
             path = path.substring(0 , path.length() - 1);
@@ -93,32 +58,14 @@ public class ImgDownloader {
         }
     }
 
-    /**
-     * @return if the ImgDownloader will overwrite existing images
-     *         that have the same names as the newly downloaded images
-     */
     public Boolean willOverwrite() {
         return this.overwrite;
     }
 
-    /**
-     * Sets whether to overwrite existing images that
-     * have the same names as the newly downloaded images
-     *
-     * @param overwrite whether to overwrite existing images
-     */
     public void setOverwrite(Boolean overwrite) {
         this.overwrite = overwrite;
     }
 
-    /**
-     * Downloads all the images based on a given URL and local path.
-     * Parses through the website for img tags and img source paths only once.
-     * Makes a thread to download each image.
-     *
-     * @throws IOException        if a connection to an URL could not be established
-     * @throws URISyntaxException if the URI is not written in a correct format
-     */
     public void downloadImages() throws IOException, URISyntaxException {
         if (!this.isParsed) {
             this.gatherImgElements();
@@ -132,14 +79,6 @@ public class ImgDownloader {
 
     }
 
-    /**
-     * Extracts the IMG elements from the website.
-     * Calls findSrcPath() to find image source paths from the IMG elements
-     * Calls storeSrcPath() to correct any relative paths and then store the paths to the "images" map
-     *
-     * @throws IOException        if a connection to an URL could not be established
-     * @throws URISyntaxException if the URI is not written in a correct format
-     */
     private void gatherImgElements() throws IOException, URISyntaxException {
 
         String container = "";
@@ -176,12 +115,6 @@ public class ImgDownloader {
         }
     }
 
-    /**
-     * Finds the image source path from given IMG tag based on the "src" attribute.
-     *
-     * @param img an HTML string containing the IMG tag
-     * @return a source path for the image if it was found or an empty string if it wasn't
-     */
     private String findSrcPath(String img) {
         int srcIndex = img.toLowerCase().indexOf("src");
         if (srcIndex != -1) {
@@ -202,15 +135,6 @@ public class ImgDownloader {
         return "";
     }
 
-    /**
-     * Stores the path and image name to the "images" map.
-     * Turns a relative path into an absolute one.
-     *
-     * @param srcPath the source path for an image
-     *
-     * @throws URISyntaxException    if the URI is not written in a correct format
-     * @throws MalformedURLException if the URL is not written in a correct format
-     */
     private void storeSrcPath(String srcPath) throws URISyntaxException, MalformedURLException {
         URI uri = new URI(srcPath);
 
@@ -225,11 +149,6 @@ public class ImgDownloader {
         }
     }
 
-    /**
-     * @param imgName name of the image
-     * @return the image name if the overwrite flag is true
-     *         the timestamp concatenated to the image name if overwrite flag is false
-     */
     private String getSaveAsName(String imgName) {
         if (this.overwrite) {
             return imgName;
@@ -239,34 +158,16 @@ public class ImgDownloader {
         }
     }
 
-    /**
-     * Inner class is used to download and save an image.
-     */
     private class SaveImageThread implements Runnable {
 
-        /* the URL of where the image is located on the internet */
         private URL imgSrcUrl;
-
-        /* name of the image */
         private String imgName;
 
-        /**
-         * Constructor that takes in an image source URL and an image name
-         *
-         * @param imgName   image name
-         * @param imgSrcUrl image source URL
-         */
         public SaveImageThread(String imgName, URL imgSrcUrl) {
             this.imgName = imgName;
             this.imgSrcUrl = imgSrcUrl;
         }
 
-        /**
-         * Downloads the image and writes the image to the local path (provided by the outer class).
-         * A timestamp will be appended to the provided image name
-         * if the user specified not to overwrite existing files.
-         * A status message will be printed out indicating download success or failure.
-         */
         public void run() {
             String saveAs = localPath + File.separator + getSaveAsName(this.imgName);
 
