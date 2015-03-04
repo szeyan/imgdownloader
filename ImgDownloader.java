@@ -124,7 +124,7 @@ public class ImgDownloader {
      */
     public void downloadImages() throws IOException, URISyntaxException {
         if (!isParsed) {
-            gatherImgElements();
+            this.gatherImgElements();
             isParsed = true;
         }
 
@@ -172,10 +172,10 @@ public class ImgDownloader {
 
                         //Look for a src path inside this IMG element
                         String imgElement = container.substring(imgTagBegin, imgTagEnd + 1);
-                        String srcPath = findSrcPath(imgElement);
+                        String srcPath = this.findSrcPath(imgElement);
 
                         if (!srcPath.isEmpty()) {
-                            storeSrcPath(srcPath);
+                            this.storeSrcPath(srcPath);
                         }
 
                         //See if current string contains more IMG elements
@@ -235,8 +235,8 @@ public class ImgDownloader {
 
         String imgName = srcPath.substring(srcPath.lastIndexOf('/') + 1);
 
-        if (!images.containsKey(imgName)) {
-            images.put(imgName, uri.toURL());
+        if (!this.images.containsKey(imgName)) {
+            this.images.put(imgName, uri.toURL());
         }
     }
 
