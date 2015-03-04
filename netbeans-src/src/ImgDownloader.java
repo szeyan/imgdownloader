@@ -13,7 +13,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,7 +52,7 @@ public class ImgDownloader {
         String path = urlOther.getFile().substring(0, urlOther.getFile().lastIndexOf('/'));
         String base = urlOther.getProtocol() + "://" + urlOther.getHost() + path;
 
-        this.url = new URL(base);
+        this.url = new URL(base+"/");
     }
 
     /**
@@ -164,7 +163,6 @@ public class ImgDownloader {
                         if (!srcPath.isEmpty()) {
                             // fix any relative paths and stores the srcPath into the map "images"
                             storeSrcPath(srcPath);
-
                         }
 
                         //See if current string contains more IMG elements
@@ -198,22 +196,22 @@ public class ImgDownloader {
         return "";
     }
 
-    private void storeSrcPath(String srcPath) throws URISyntaxException {
+    private void storeSrcPath(String srcPath) throws URISyntaxException, MalformedURLException {
         URI uri = new URI(srcPath);
-
+        
         if (!uri.isAbsolute()) {
             //srcPath is relative. Make it absolute
-            URI a = new URI("http://www.foo.com/bee/bar");
-            URI b = new URI("../bar.html");
-            URI c = a.resolve(b);
-
-            System.out.println(c.toString());
-            this.url.toURI().resolve(uri);
-            System.out.println(this.url.toURI().resolve(uri));
+            uri = this.url.toURI().resolve(uri);
         }
-
-        //an absolute path is URL concatenated with the relative path
-        //an image name is the last index of a '/' to the end of the srcPath
+        
+        //find the image name from the srcPath
+        String imgName = srcPath.substring(srcPath.lastIndexOf('/') + 1);
+        
+        //add the image source path and its name to the map "images"
+        if(!images.containsKey(imgName)){
+            images.put(imgName, uri.toURL());
+        }
+        
     }
 
     /**
