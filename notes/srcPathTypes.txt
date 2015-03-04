@@ -24,3 +24,5 @@ Types of src path layouts:
 	" alt="Linkedin5" />
 	
 	<img class="linkedin"src="img/in1.png" /><img class="linkedin"src="img/in1.png" alt="Linkedin1" />
+	
+	<img alt=\"Loading\" src=\"https://s.gr-assets.com/assets/loading.gif\" />

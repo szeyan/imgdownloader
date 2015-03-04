@@ -80,11 +80,16 @@ public class ImgDownloader {
      * Sets the local destination to save the images to
      *
      * @param path is where to save all the images to
-     * @throws IllegalArgumentException if the new path is not a directory, cannot be written to, or does not exist
+     * @throws IllegalArgumentException if the specified directory does not exist
      */
     public void setLocalPath(String path) throws IllegalArgumentException {
+        //remove a trailing quote that's caused by /" 
+        if(path.charAt(path.length() - 1 ) == '"'){
+            path = path.substring(0 , path.length() - 1);
+        }
+        
         File newPath = new File(path);
-        if (newPath.isDirectory() && newPath.canWrite()) {
+        if (newPath.isDirectory()) {
             this.localPath = newPath.getAbsolutePath();
         } else {
             throw new IllegalArgumentException(path + " is not a valid path");
@@ -204,7 +209,15 @@ public class ImgDownloader {
             if (img.charAt(srcIndex - 1) != '-') {
                 int srcPathBegin = img.indexOf('\"', srcIndex);
                 int srcPathEnd = img.indexOf('\"', srcPathBegin + 1);
-                return img.substring(srcPathBegin + 1, srcPathEnd).trim();
+                
+                String ret = img.substring(srcPathBegin + 1, srcPathEnd).trim();
+                
+                //remove any trailing \ 
+                if(ret.charAt(ret.length() - 1) == '\\'){
+                    ret = ret.substring(0 , ret.length() - 1).trim();
+                }
+                
+                return ret;
             }
         }
 

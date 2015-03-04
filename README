@@ -28,13 +28,15 @@ NOTES/FEATURES
 		- Optionally choose whether to overwrite existing images if they exist in the destination directory
 			- if overwrite (ie: "-ow") is not specified, the images will be saved with a timestamp to prevent overwrites
 	
-	The program finds the images to download by searching for IMG elements within the website.  Specifically, it will look for the "src" attribute within the IMG element.  Additionally, if the source path contains ".../" for a prior directory or is a relative path, the program will correct the path and download the image. If the "src" is not specified or if the image fails to download, the program will simply move onto the next IMG element.  
+	The program finds the images to download by searching for IMG elements within the website.  Specifically, it will look for the "src" attribute within the IMG element; this also includes IMG elements found in scripts.  Additionally, if the source path contains ".../" for a prior directory or is a relative path, the program will correct the path and download the image. If the "src" is not specified or if the image fails to download, the program will simply move onto the next IMG element.  
 	
 	In short, the program will not crash if it fails to download an image.
 	
 	To speed up the process of downloading the images, threads are created for reading in and saving each image.
 
-	Images with the same source path within a website (multiple copies) will only be saved once.
+	Multiple images with the same source path will only be saved once.
+	
+	*Please view notes/testSites.txt and notes/srcPathTypes.txt for example working websites and acceptable IMG tag formats.
 
 DESIGN DECISIONS		
 	There were a few ways to parse the HTML for IMG tags:
@@ -62,6 +64,6 @@ USAGE
 				*If this is not specified, program's directory will be used to as the destination path.
 			- [-ow] is the optional flag that states whether to overwrite existing files.  
 				*If this is not specified, a timestamp will be appended to all downloaded images.
-			ie: java Main "http://pages.uoregon.edu/szeyan" "C:\Users\Melody\Downloads" -ow
+			ie: java Main "https://www.goodreads.com/list" "C:\Users\Melody\Downloads" -ow
 
 endofreadme
