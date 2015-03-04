@@ -59,7 +59,7 @@ DESIGN DECISIONS
 ----------------
 There were a few ways to parse the HTML for IMG tags:
 
-1. Use an 3rd party HTML parser
+1. Use a 3rd party HTML parser
 2. Use Java's HTMLEditorKit and HTMLDocument classes
 3. Use regular expressions
 4. Use String methods such as contains() and search through the HTML
