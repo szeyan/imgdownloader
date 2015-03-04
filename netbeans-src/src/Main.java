@@ -15,20 +15,19 @@ public class Main {
         if (args.length < 1 || args.length > 3) {
             System.err.println(properUsage);
             System.err.println("ie: java Main "
-                    + "http://pages.uoregon.edu/szeyan/ "
-                    + "C:\\Users\\Melody\\Downloads "
+                    + "\"http://pages.uoregon.edu/szeyan/\" "
+                    + "\"C:\\Users\\Melody\\Downloads\" "
                     + "-ow ");
             System.exit(1);
         }
  
         try {
           //Parse URL - args[0]
-          imgDownloader = new ImgDownloader("http://pages.uoregon.edu/szeyan/img/ml.png"); 
+          imgDownloader = new ImgDownloader(args[0]); 
           
           //Parse Local Path - args[1]
           if(args.length > 1){
-             imgDownloader.setLocalPath("C:\\Users\\Melody\\Downloads\\New folder");
-             System.out.println(imgDownloader.getLocalPath());
+             imgDownloader.setLocalPath(args[1]);
           }
           
           //Parse overwrite flag - args[2]
@@ -39,6 +38,10 @@ public class Main {
                 throw new IllegalArgumentException(properUsage);
             }
           }
+          
+          System.out.println("Website URL: \t"+imgDownloader.getURL());
+          System.out.println("Desination: \t"+imgDownloader.getLocalPath());
+          System.out.println();
           
           //Download all the images now that the arguments are set
           imgDownloader.downloadImages();

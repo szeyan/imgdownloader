@@ -1,10 +1,12 @@
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import static java.lang.System.out;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -44,6 +46,13 @@ public class ImgDownloader {
      */
     public ImgDownloader(String url) throws MalformedURLException {
         this.url = new URL(url);
+    }
+
+    /**
+     * @return URL to a website to download the images from
+     */
+    public String getURL() {
+        return this.url.toString();
     }
 
     /**
@@ -98,12 +107,12 @@ public class ImgDownloader {
         }
 
         URL one = new URL("http://pages.uoregon.edu/szeyan/img/in.png");
-        URL two = new URL("http://pages.uoregon.edu/szeyan/img/m.png");
+        URL two = new URL("http://pages.uoregon.edu/szeyan/img/ml.png");
 
         //For each image found, create a thread to download the image
-        Runnable r1 = new SaveImageThread(one, "blue.png");
+        Runnable r1 = new SaveImageThread(one, "blue1.png");
         new Thread(r1).start();
-        Runnable r2 = new SaveImageThread(two, "blue2.png");
+        Runnable r2 = new SaveImageThread(two, "blue.png");
         new Thread(r2).start();
     }
 
@@ -151,36 +160,33 @@ public class ImgDownloader {
          * A status message will be printed out indicating download success or failure.
          */
         public void run() {
+            //Concatenate the local destination path and the name to save the image as
+            String saveAs = localPath + File.separator + getSaveAsName(this.imgName);
+            
+            /*  Download the image 
+                (note: try-with-resources will automatically close the streams) */
+            try (
+                    //Open a connection to the image source URL and get the input stream
+                    InputStream in = new BufferedInputStream(this.imgSrcUrl.openStream());
+                    
+                    //Create a stream for writing out the data to the "saveAs" path
+                    OutputStream out = new BufferedOutputStream(new FileOutputStream(saveAs))
+            ) {
 
-            try {
-                //Open a connection to the image source URL and get the input stream
-                InputStream in = new BufferedInputStream(this.imgSrcUrl.openStream());
-
-                //Read in the image data in chunks and write it to the output stream
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                //Read in the image data in chunks and write it out in chunks to disk
                 byte[] buffer = new byte[1024];
                 int length = 0;
                 while ((length = in.read(buffer)) != -1) {
                     out.write(buffer, 0, length);
                 }
-                out.close();
-                in.close();
-
-                //Save the image data to the local path (provided by the outer class)
-                byte[] bytes = out.toByteArray();
-                String path = localPath + File.separator + getSaveAsName(this.imgName);
-                FileOutputStream fos = new FileOutputStream(path);
-                fos.write(bytes);
-                fos.close();
 
                 //Print success status message
-                System.out.println("Downloading " + this.imgName + " from " + this.imgSrcUrl
-                        + "\t-- Success");
+                System.out.println("Downloading " + this.imgSrcUrl + "\t-- SUCCESS");
 
             } catch (Exception e) {
-                //Ignore the image if it failed to download.  Print a failure status message.
-                System.out.println("Downloading " + this.imgName + " from " + this.imgSrcUrl
-                        + "\t-- Failure");
+                //Ignore any errors when an image fails to download/save.  Print a failure status message.
+                System.out.println("Downloading " + this.imgSrcUrl + "\t-- FAILURE");
+
             }
         }
     }
