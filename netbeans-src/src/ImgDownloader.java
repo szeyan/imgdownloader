@@ -157,7 +157,7 @@ public class ImgDownloader {
             while ((inputLine = in.readLine()) != null) {
 
                 //Used to skip current line of HTML until an IMG tag is found
-                if (containsImgTag(inputLine)) {
+                if (inputLine.toLowerCase().contains("<img")) {
                     foundImgTag = true;
                 }
 
@@ -180,19 +180,11 @@ public class ImgDownloader {
 
                         //See if current string contains more IMG elements
                         container = container.substring(imgTagEnd);
-                        foundImgTag = containsImgTag(container);
+                        foundImgTag = container.toLowerCase().contains("<img");
                     }
                 }
             }
         }
-    }
-
-    /**
-     * @param line an HTML string
-     * @return whether the line contains an IMG tag
-     */
-    private boolean containsImgTag(String line) {
-        return line.toLowerCase().contains("<img");
     }
 
     /**
