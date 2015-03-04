@@ -1,3 +1,5 @@
+java Main "http://pages.uoregon.edu/szeyan/img/imgTest.html" "C:\Users\Melody\Downloads\New Folder"
+
 java Main "http://pages.uoregon.edu/szeyan/index.html" "C:\Users\Melody\Downloads\New Folder"
 java Main "http://pages.uoregon.edu/szeyan/index.html" "C:\Users\Melody\Downloads\New Folder" -ow
 java Main "http://pages.uoregon.edu/szeyan/" "C:\Users\Melody\Downloads\New Folder"
