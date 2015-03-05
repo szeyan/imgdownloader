@@ -39,11 +39,6 @@ public class ImgDownloaderHelper {
         }
         this.WEBSITE_URL = new URL(urlOther);
         
-        boolean quoteWasNotEscaped = (path.charAt(path.length() - 1 ) == '"');
-        if(quoteWasNotEscaped){
-            path = path.substring(0 , path.length() - 1);
-        } 
-        
         File newPath = new File(path);
         if (newPath.isDirectory()) {
             this.DESTINATION_PATH = newPath.getAbsolutePath();
