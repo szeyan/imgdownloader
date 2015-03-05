@@ -1,24 +1,27 @@
-java Main "http://pages.uoregon.edu/szeyan/img/imgTest.html" "C:\Users\Melody\Downloads\New Folder"
+java ImgDownloader "http://pages.uoregon.edu/szeyan/img/imgTest.html" "C:\Users\Melody\Downloads\New Folder"
 
-java Main "http://pages.uoregon.edu/szeyan/index.html" "C:\Users\Melody\Downloads\New Folder"
-java Main "http://pages.uoregon.edu/szeyan/index.html" "C:\Users\Melody\Downloads\New Folder" -ow
-java Main "http://pages.uoregon.edu/szeyan/" "C:\Users\Melody\Downloads\New Folder"
-java Main "http://pages.uoregon.edu/szeyan" "C:\Users\Melody\Downloads\New Folder"
-java Main "http://pages.uoregon.edu/szeyan" "C:\Users\Melody\Downloads\New Folder\"
+java ImgDownloader "http://pages.uoregon.edu/szeyan/index.html" 
+java ImgDownloader "http://pages.uoregon.edu/szeyan/index.html" "C:\Users\Melody\Downloads\New Folder"
+java ImgDownloader "http://pages.uoregon.edu/szeyan/index.html" "C:\Users\Melody\Downloads\New Folder" -overwrite
+java ImgDownloader "http://pages.uoregon.edu/szeyan" "C:\Users\Melody\Downloads\New Folder\"" -overwrite
 
-java Main "http://www.cs.uoregon.edu/Classes/13W/cis445/schedule.html" "C:\Users\Melody\Downloads\New Folder"
+java ImgDownloader "http://pages.uoregon.edu/szeyan/" "C:\Users\Melody\Downloads\New Folder"
+java ImgDownloader "http://pages.uoregon.edu/szeyan" "C:\Users\Melody\Downloads\New Folder"
+java ImgDownloader "http://pages.uoregon.edu/szeyan" "C:\Users\Melody\Downloads\New Folder\"
 
-java Main "http://getbootstrap.com/2.3.2/index.html" "C:\Users\Melody\Downloads\New Folder"
+java ImgDownloader "http://www.cs.uoregon.edu/Classes/13W/cis445/schedule.html" "C:\Users\Melody\Downloads\New Folder"
 
-java Main "http://altsrc.net/" "C:\Users\Melody\Downloads\New Folder"
+java ImgDownloader "http://getbootstrap.com/2.3.2/index.html" "C:\Users\Melody\Downloads\New Folder"
 
-java Main "http://uoregon.edu/" "C:\Users\Melody\Downloads\New Folder"
+java ImgDownloader "http://altsrc.net/" "C:\Users\Melody\Downloads\New Folder"
 
-java Main "http://en.wikipedia.org/wiki/Main_Page" "C:\Users\Melody\Downloads\New Folder"
+java ImgDownloader "http://uoregon.edu/" "C:\Users\Melody\Downloads\New Folder"
 
-java Main "https://www.goodreads.com/list" "C:\Users\Melody\Downloads\New Folder"
+java ImgDownloader "http://en.wikipedia.org/wiki/Main_Page" "C:\Users\Melody\Downloads\New Folder"
 
-java Main "http://www.goodreads.com/list/show/43.Best_Young_Adult_Books" "C:\Users\Melody\Downloads\New Folder"
+java ImgDownloader "https://www.goodreads.com/list" "C:\Users\Melody\Downloads\New Folder"
+
+java ImgDownloader "http://www.goodreads.com/list/show/43.Best_Young_Adult_Books" "C:\Users\Melody\Downloads\New Folder"
 
 
 

@@ -16,60 +16,48 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ImgDownloader {
-
-    private static final String DEFAULT_PATH = System.getProperty("user.dir");
-    private URL url;
-    private String localPath = DEFAULT_PATH;
-    private Boolean overwrite = false;
-    private Boolean isParsed = false;
+public class ImgDownloaderHelper {
+    public final URL WEBSITE_URL;
+    public final String DESTINATION_PATH;
+    public final boolean OVERWRITE_EXISTING_FILES;
+    private boolean imagesHaveBeenParsed = false;
     private Map<String, URL> images = new HashMap<>();
 
-    public ImgDownloader(String urlOther) throws MalformedURLException {
-        if (urlOther.charAt(urlOther.length() - 1) != '/') {
-            int lastSlash = urlOther.lastIndexOf('/');
-            int dot = urlOther.lastIndexOf('.');
-            if ((lastSlash > dot)  && !urlOther.contains("?")) {
+    public ImgDownloaderHelper(String urlOther, String path, boolean overwrite) 
+            throws MalformedURLException, IllegalArgumentException {
+        
+        boolean hasNoTrailingSlash = (urlOther.charAt(urlOther.length() - 1) != '/');
+        if (hasNoTrailingSlash) {
+            
+            int lastSlashIndex = urlOther.lastIndexOf('/');
+            int lastDotIndex = urlOther.lastIndexOf('.');
+            
+            boolean urlIsADirectory = (lastSlashIndex > lastDotIndex)  && !urlOther.contains("?");
+            if (urlIsADirectory) {
                 urlOther += '/';
             }
         }
-
-        this.url = new URL(urlOther);
-    }
-
-    public String getURL() {
-        return this.url.toString();
-    }
-
-    public String getLocalPath() {
-        return this.localPath;
-    }
-
-    public void setLocalPath(String path) throws IllegalArgumentException {
-        if(path.charAt(path.length() - 1 ) == '"'){
+        this.WEBSITE_URL = new URL(urlOther);
+        
+        boolean quoteWasNotEscaped = (path.charAt(path.length() - 1 ) == '"');
+        if(quoteWasNotEscaped){
             path = path.substring(0 , path.length() - 1);
-        }
+        } 
         
         File newPath = new File(path);
         if (newPath.isDirectory()) {
-            this.localPath = newPath.getAbsolutePath();
+            this.DESTINATION_PATH = newPath.getAbsolutePath();
         } else {
             throw new IllegalArgumentException(path + " is not a valid path");
         }
-    }
-
-    public Boolean willOverwrite() {
-        return this.overwrite;
-    }
-
-    public void setOverwrite(Boolean overwrite) {
-        this.overwrite = overwrite;
+        
+        this.OVERWRITE_EXISTING_FILES = overwrite;
     }
 
     public void downloadImages() throws IOException, URISyntaxException {
-        if (!this.isParsed) {
+        if (!this.imagesHaveBeenParsed) {
             this.gatherImgElements();
-            this.isParsed = true;
+            this.imagesHaveBeenParsed = true;
         }
 
         for (Map.Entry<String, URL> img : this.images.entrySet()) {
@@ -84,7 +72,7 @@ public class ImgDownloader {
         String container = "";
         boolean foundImgTag = false;
 
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(this.url.openStream()))) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(this.WEBSITE_URL.openStream()))) {
 
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
@@ -118,13 +106,17 @@ public class ImgDownloader {
     private String findSrcPath(String img) {
         int srcIndex = img.toLowerCase().indexOf("src");
         if (srcIndex != -1) {
-            if (img.charAt(srcIndex - 1) != '-') {
+            
+            boolean notADataSrcAttribute = (img.charAt(srcIndex - 1) != '-');
+            if (notADataSrcAttribute) {
+                
                 int srcPathBegin = img.indexOf('\"', srcIndex);
                 int srcPathEnd = img.indexOf('\"', srcPathBegin + 1);
                 
                 String ret = img.substring(srcPathBegin + 1, srcPathEnd).trim();
                 
-                if(ret.charAt(ret.length() - 1) == '\\'){
+                boolean slashWasNotEscaped = (ret.charAt(ret.length() - 1) == '\\');
+                if(slashWasNotEscaped){
                     ret = ret.substring(0 , ret.length() - 1).trim();
                 }
                 
@@ -139,7 +131,7 @@ public class ImgDownloader {
         URI uri = new URI(srcPath);
 
         if (!uri.isAbsolute()) {
-            uri = this.url.toURI().resolve(uri);
+            uri = this.WEBSITE_URL.toURI().resolve(uri);
         }
 
         String imgName = srcPath.substring(srcPath.lastIndexOf('/') + 1);
@@ -150,7 +142,7 @@ public class ImgDownloader {
     }
 
     private String getSaveAsName(String imgName) {
-        if (this.overwrite) {
+        if (this.OVERWRITE_EXISTING_FILES) {
             return imgName;
         } else {
             String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis());
@@ -169,7 +161,7 @@ public class ImgDownloader {
         }
 
         public void run() {
-            String saveAs = localPath + File.separator + getSaveAsName(this.imgName);
+            String saveAs = DESTINATION_PATH + File.separator + getSaveAsName(this.imgName);
 
             try (
                 InputStream in = new BufferedInputStream(this.imgSrcUrl.openStream());
