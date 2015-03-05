@@ -1,28 +1,48 @@
-Types of src path layouts:
-
+Types of src path layouts
+--------------    
+    **Program Will Skip**
+    
+    Single line, but contains a data-src (different from a src attribute). 
 	<img class="linkedin"data-src="img/in0.png" alt="Linkedin0" />
 
+    ----------
+    
+    **Program Will Download**
+    
+    Single line.  
 	<img class="linkedin"src="img/in1.png" alt="Linkedin1" />
 
+    
+    Src on a different line.
 	<img class="linkedin"
 	src="img/in2.png" alt="Linkedin2" />
 
+    
+    Src path on a different line than the src attribute
 	<img class="linkedin"
 	src=
 
 	"img/in3.png" alt="Linkedin3" />
 
+    
+    Src path on a different line than the src attribute
 	<img class="linkedin"
 	src=
 	"
 	img/in4.png" alt="Linkedin4" />
-
+    
+    
+    Src path on a different line than the src attribute
 	<img class="linkedin"src=
 	"
 	img/in5.png
 
 	" alt="Linkedin5" />
-	
+    
+    
+	Two img elements in succession
 	<img class="linkedin"src="img/in1.png" /><img class="linkedin"src="img/in1.png" alt="Linkedin1" />
-	
+    
+    
+	An img element with an src path located inside a script (and is escaped)
 	<img alt=\"Loading\" src=\"https://s.gr-assets.com/assets/loading.gif\" />

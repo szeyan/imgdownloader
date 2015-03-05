@@ -39,6 +39,8 @@ This program allows the user to do the following:
 
 - Optionally choose the local path to save the images to:
     - ie: C:\Users\Melody\Downloads
+    - ie: "C:\Users\Melody\Downloads\New Folder\\"
+    * if using quotes (to allow spaces in a path), the user is responsible for correctly escaping the path
     - if the local path is not specified, the destination will be same directory as where the program is located
 
 - Optionally choose whether to overwrite existing images if they exist in the destination directory
