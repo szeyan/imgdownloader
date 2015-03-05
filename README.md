@@ -23,7 +23,7 @@ RELEVANT FILES
     netbeans-src/               - folder that contains the NetBeans project
     notes/                      - folder that contains additional notes
     ImgDownloader.java          - main driver for this program
-    ImgDownloaderHelper.java    - a class that Main.java uses to download the images
+    ImgDownloaderHelper.java    - a helper class used to download the images
 
 
 NOTES/FEATURES
@@ -38,8 +38,8 @@ This program allows the user to do the following:
     * http://pages.uoregon.edu/szeyan/ml.png will not work because this is a direct path to an image and not to a website, meaning the link will not return HTML for the program to parse.
 
 - Optionally choose the local path to save the images to:
-    - ie: C:\Users\Melody\Downloads
-    - ie: "C:\Users\Melody\Downloads\New Folder\\"
+    - ie: `C:\Users\Melody\Downloads`
+    - ie: `"C:\Users\Melody\Downloads\New Folder\\"`
     * if using quotes (to allow spaces in a path), the user is responsible for correctly escaping the path
     - if the local path is not specified, the destination will be same directory as where the program is located
 
