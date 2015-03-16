@@ -8,7 +8,7 @@ public class ImgDownloader {
         if (args.length < 1 || args.length > 3) {
             System.err.println(usage);
             System.err.println("ie: java ImgDownloader "
-                    + "\"http://pages.uoregon.edu/szeyan/\" "
+                    + "\"http://pages.uoregon.edu/szeyan/old\" "
                     + "\"C:\\Users\\Melody\\Downloads\" "
                     + "-overwrite ");
             System.exit(1);

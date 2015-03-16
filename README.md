@@ -32,10 +32,10 @@ NOTES/FEATURES
 This program allows the user to do the following:
 
 - Specify the website URL in a few ways:
-    - http://pages.uoregon.edu/szeyan/index.html
-    - http://pages.uoregon.edu/szeyan/
+    - http://pages.uoregon.edu/szeyan/old/index.html
+    - http://pages.uoregon.edu/szeyan/old/
     - http://pages.uoregon.edu/szeyan
-    * http://pages.uoregon.edu/szeyan/ml.png will not work because this is a direct path to an image and not to a website, meaning the link will not return HTML for the program to parse.
+    * http://pages.uoregon.edu/szeyan/old/img/ml.png will not work because this is a direct path to an image and not to a website, meaning the link will not return HTML for the program to parse.
 
 - Optionally choose the local path to save the images to:
     - ie: `C:\Users\Melody\Downloads`
