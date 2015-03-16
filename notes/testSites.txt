@@ -1,6 +1,6 @@
 Download an image located at the root
 --------------
-java ImgDownloader "http://pages.uoregon.edu/szeyan/old/img/imgTest.html" "C:\Users\Melody\Downloads\New Folder"
+java ImgDownloader "http://pages.uoregon.edu/szeyan/img/imgTest.html" "C:\Users\Melody\Downloads\New Folder"
 
 
 Download images by specifying the optional location and if the program should overwrite existing files
@@ -12,19 +12,19 @@ java ImgDownloader "http://pages.uoregon.edu/szeyan/old/index.html" "C:\Users\Me
 
 Program will throw error because this is not correctly escaped
 --------------
-java ImgDownloader "http://pages.uoregon.edu/szeyan" "C:\Users\Melody\Downloads\New Folder\" -overwrite
+java ImgDownloader "http://pages.uoregon.edu/szeyan/old" "C:\Users\Melody\Downloads\New Folder\" -overwrite
 
 
 Program will parse this correctly escaped local path
 --------------
-java ImgDownloader "http://pages.uoregon.edu/szeyan" "C:\Users\Melody\Downloads\New Folder\\" -overwrite
+java ImgDownloader "http://pages.uoregon.edu/szeyan/old" "C:\Users\Melody\Downloads\New Folder\\" -overwrite
 
 
 Other working sites
 --------------
 java ImgDownloader "http://pages.uoregon.edu/szeyan/old/" "C:\Users\Melody\Downloads\New Folder"
-java ImgDownloader "http://pages.uoregon.edu/szeyan" "C:\Users\Melody\Downloads\New Folder"
-java ImgDownloader "http://pages.uoregon.edu/szeyan" "C:\Users\Melody\Downloads\New Folder\\"
+java ImgDownloader "http://pages.uoregon.edu/szeyan/old" "C:\Users\Melody\Downloads\New Folder"
+java ImgDownloader "http://pages.uoregon.edu/szeyan/old" "C:\Users\Melody\Downloads\New Folder\\"
 java ImgDownloader "http://www.cs.uoregon.edu/Classes/13W/cis445/schedule.html" "C:\Users\Melody\Downloads\New Folder"
 java ImgDownloader "http://getbootstrap.com/2.3.2/index.html" "C:\Users\Melody\Downloads\New Folder"
 java ImgDownloader "http://altsrc.net/" "C:\Users\Melody\Downloads\New Folder"
